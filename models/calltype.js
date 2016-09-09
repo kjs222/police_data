@@ -2,8 +2,7 @@
 module.exports = function(sequelize, DataTypes) {
   var CallType = sequelize.define('CallType', {
     code: DataTypes.STRING,
-    description: DataTypes.STRING,
-    test: DataTypes.STRING
+    description: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
