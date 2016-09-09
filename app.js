@@ -56,5 +56,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
+var Sequelize = require('sequelize')
+var sequelize = new Sequelize('postgres://localhost:5432/police_data');
 
 module.exports = app;
