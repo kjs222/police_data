@@ -7,7 +7,6 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         Disposition.hasMany(models.Incident);
-        // associations can be defined here
       }
     },
     underscored: true,
