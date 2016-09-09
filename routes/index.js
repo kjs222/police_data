@@ -3,6 +3,11 @@ var express = require('express');
 var router = express.Router();
 var pg = require('pg');
 
+var callTypesController = require('../controllers/calltypes');
+var beatsController = require('../controllers/beats');
+var dispositionsController = require('../controllers/dispositions');
+var incidentsController = require('../controllers/incidents');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -10,26 +15,19 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
-router.get('/api/v1/call_types', function(req, res) {
-  models.CallType.findAll().then(function(callTypes) {
-    return res.json(callTypes)
-  });
-});
+// // Create endpoint handlers for indiv items /items/:item_id
+// router.route('/items/:item_id')
+//   .get(itemController.getItem)
 
-router.get('/api/v1/dispositions', function(req, res) {
-  models.Disposition.findAll().then(function(dispositions) {
-    return res.json(dispositions)
-  });
-});
 
-router.get('/api/v1/beats', function(req, res) {
-  models.Beat.findAll().then(function(beats) {
-    return res.json(beats)
-  });
-});
+router.route('/api/v1/call_types')
+  .get(callTypesController.getCallTypes);
 
-router.get('/api/v1/incidents', function(req, res) {
-  models.Incident.findAll({ limit: 100 }).then(function(incidents) {
-    return res.json(incidents)
-  });
-});
+router.route('/api/v1/dispositions')
+  .get(dispositionsController.getDispositions);
+
+router.route('/api/v1/beats')
+  .get(beatsController.getBeats);
+
+router.route('/api/v1/incidents')
+  .get(incidentsController.getIncidents);
