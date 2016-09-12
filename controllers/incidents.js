@@ -7,11 +7,15 @@ exports.getIncidents = function(req, res) {
 
 
 var allIncidents = function(req, res) {
-  search_terms = mapQuery(req.query)
-  if (search_terms["invalid_parameter"]) {
+  searchQuery = mapQuery(req.query);
+  // return res.json(searchQuery);
+
+  if (searchQuery["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   } else {
-    models.Incident.findAll({where: mapQuery(req.query), limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
+    // incidents = models.Incident.searchOrFindAll(searchQuery);
+    // return res.json(incidents);
+    models.Incident.findAll({where: searchQuery, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
       for(i in incidents) {
         incidents[i] = incidents[i].serialize();
       }
@@ -30,13 +34,24 @@ var queryHashMap = {number: "number",
                     call_desc: "CallType.description",
                     street: "street",
                     street_number: "street_number",
-                    street_dir: "street_dir"};
+                    street_dir: "street_dir",
+                    date: "date",
+                    start_date: "date",
+                    end_date: "date"};
 
 var mapQuery = function(query) {
   var newQuery = {}
   for(var searchItem in query) {
     if(!queryHashMap[searchItem]) {
       newQuery["invalid_parameter"] = query[searchItem];
+    } else if (searchItem == "date") {
+      var start = query[searchItem] + "T00:00:00.000Z"
+      var end = query[searchItem] + "T23:59:59.000Z"
+      newQuery[queryHashMap[searchItem]] = { between: [start, end]}
+    } else if (searchItem == "start_date"){
+      newQuery[queryHashMap[searchItem]] = { gte: new Date(query[searchItem])}
+    } else if (searchItem == "end_date"){
+      newQuery[queryHashMap[searchItem]] = { lt: new Date(query[searchItem])}
     } else {
       newQuery[queryHashMap[searchItem]] = query[searchItem];
     };
