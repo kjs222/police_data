@@ -14,10 +14,11 @@
     "dialect": "postgres"
   },
   "production": {
+    "use_env_variable": "DATABASE_URL",
     "username": "kerrysheldon",
     "password": null,
     "database": "police_data",
-    "host": "127.0.0.1",
+    "host": "sandiego-police-data.herokuapp.com",
     "dialect": "postgres"
   }
 }
