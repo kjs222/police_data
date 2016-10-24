@@ -7,14 +7,10 @@ exports.getIncidents = function(req, res) {
 
 
 var allIncidents = function(req, res) {
-  searchQuery = mapQuery(req.query);
-  // return res.json(searchQuery);
-
+  var searchQuery = mapQuery(req.query);
   if (searchQuery["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   } else {
-    // incidents = models.Incident.searchOrFindAll(searchQuery);
-    // return res.json(incidents);
     models.Incident.findAll({where: searchQuery, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
       for(i in incidents) {
         incidents[i] = incidents[i].serialize();

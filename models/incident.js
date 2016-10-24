@@ -41,14 +41,6 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
-      // searchOrFindAll: function(searchQuery) {
-      //   Incident.findAll({where: searchQuery, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
-      //     for(i in incidents) {
-      //       incidents[i] = incidents[i].serialize();
-      //     }
-      //     return incidents;
-      //   });
-      // },
       associate: function(models) {
         Incident.belongsTo(models.CallType, {
           onDelete: "CASCADE",
