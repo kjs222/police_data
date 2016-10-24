@@ -32,3 +32,9 @@ router.route('/api/v1/beats')
 
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
+
+if (!module.parent) {
+  app.listen(app.get('port'), () => {
+    console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+  });
+}
