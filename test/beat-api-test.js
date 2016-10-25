@@ -35,10 +35,11 @@ describe('Beat API', () => {
     });
 
     it('should return 136 beats', (done) => {
+      var numBeats = 136;
       this.request.get('/api/v1/beats', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        assert.equal(parsed.length, 136);
+        assert.equal(parsed.length, numBeats);
         done();
       });
     });

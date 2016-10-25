@@ -35,10 +35,11 @@ describe('CallType API', () => {
     });
 
     it('should return 311 call_types', (done) => {
+      var numCallTypes = 311;
       this.request.get('/api/v1/call_types', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        assert.equal(parsed.length, 311);
+        assert.equal(parsed.length, numCallTypes);
         done();
       });
     });
@@ -46,8 +47,8 @@ describe('CallType API', () => {
     it('should return call_types with correct keys', (done) => {
       this.request.get('/api/v1/call_types', (error, response) => {
         if (error) { done(error); }
-        var parsedCallType = JSON.parse(response.body)[0]
-        var keys = Object.keys(parsedCallType)
+        var parsedCallType = JSON.parse(response.body)[0];
+        var keys = Object.keys(parsedCallType);
         assert.isObject(parsedCallType);
         assert.equal(keys.length, 3);
         assert.include(keys, "code");

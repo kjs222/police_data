@@ -35,10 +35,11 @@ describe('Incident API', () => {
     });
 
     it('should return 100 incidents', (done) => {
+      var numIncidentsPerPage = 100;
       this.request.get('/api/v1/incidents', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        assert.equal(parsed.length, 100);
+        assert.equal(parsed.length, numIncidentsPerPage);
         done();
       });
     });
@@ -46,8 +47,8 @@ describe('Incident API', () => {
     it('should return incidents with correct keys', (done) => {
       this.request.get('/api/v1/incidents', (error, response) => {
         if (error) { done(error); }
-        var parsedIncident = JSON.parse(response.body)[0]
-        var keys = Object.keys(parsedIncident)
+        var parsedIncident = JSON.parse(response.body)[0];
+        var keys = Object.keys(parsedIncident);
         assert.isObject(parsedIncident);
         assert.equal(keys.length, 10);
         assert.equal(keys.indexOf("incident number"), 0);

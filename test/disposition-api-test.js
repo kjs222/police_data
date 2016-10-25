@@ -35,10 +35,11 @@ describe('Disposition API', () => {
     });
 
     it('should return 42 dispositions', (done) => {
+      var numDispositions = 42;
       this.request.get('/api/v1/dispositions', (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
-        assert.equal(parsed.length, 42);
+        var parsed = JSON.parse(response.body);
+        assert.equal(parsed.length, numDispositions);
         done();
       });
     });
@@ -46,8 +47,8 @@ describe('Disposition API', () => {
     it('should return dispositions with correct keys', (done) => {
       this.request.get('/api/v1/dispositions', (error, response) => {
         if (error) { done(error); }
-        var parsedDisposition = JSON.parse(response.body)[0]
-        var keys = Object.keys(parsedDisposition)
+        var parsedDisposition = JSON.parse(response.body)[0];
+        var keys = Object.keys(parsedDisposition);
         assert.isObject(parsedDisposition);
         assert.equal(keys.length, 3);
         assert.include(keys, "code");

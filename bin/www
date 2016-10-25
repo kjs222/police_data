@@ -1,9 +1,5 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
 var app = require('../app');
 var debug = require('debug')('police_data:server');
 var http = require('http');
@@ -12,25 +8,15 @@ var models = require("../models");
 /**
  * Get port from environment and store in Express.
  */
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-
 var server = http.createServer(app);
-
-// models.sequelize.sync().then(function () {
-//   server.listen(port);
-//   server.on('error', onError);
-//   server.on('listening', onListening);
-// });
-
 function onError(error) { /* ... */ }
 function onListening() {}
-
 
 /**
  * Listen on provided port, on all network interfaces.
