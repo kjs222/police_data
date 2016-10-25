@@ -14,6 +14,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+router.get('/documentation', function(req, res, next) {
+  res.sendfile('public/dist/index.html');
+});
+
 module.exports = router;
 
 // // Create endpoint handlers for indiv items /items/:item_id
