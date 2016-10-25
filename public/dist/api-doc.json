@@ -1,29 +1,31 @@
+
+
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is a sample documentation for the open github api. The api is located at https://api.github.com/",
+    "description": "This is documentation for the San Diego Police Department Incident API. The api is located at https://sandiego-police-data.herokuapp.com/",
     "version": "0.0.1",
-    "title": "Github API",
+    "title": "San Diego Police Incident Data API",
     "contact": {
-      "email": "john.doe@gmail.com"
+      "email": "kerry.sheldon@gmail.com"
     },
     "license": {
       "name": "MIT",
-      "url": "https://github.com/swagger-api/swagger-ui/blob/master/LICENSE"
+      "url": ""
     }
   },
-  "host": "api.github.com",
-  "basePath": "/",
+  "host": "localhost:3000",
+  "basePath": "/api/v1/",
   "produces": ["application/json"],
-  "schemes": ["https"],
+  "schemes": ["http"],
     "paths": {
-      "/": {
+      "/incidents": {
         "get": {
-          "tags": ["info"],
-          "description": "Get information about the Github API",
+          "tags": ["All Incidents"],
+          "description": "Gets information on police incidents.  Returns 100...  Accepts a variety of search/filter parameters",
           "responses": {
             "200": {
-              "description": "successfully got info",
+              "description": "successfully returned incidents",
               "schema": {
                 "type": "object",
                 "properties": {
