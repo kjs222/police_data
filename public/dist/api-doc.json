@@ -1,15 +1,11 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is documentation for the San Diego Police Department Incident API. The api is located at https://sandiego-police-data.herokuapp.com/",
-    "version": "0.0.1",
-    "title": "San Diego Police Incident Data API",
+    "description": "This is documentation for the San Diego Police Department Incident API. The API is located at https://sandiego-police-data.herokuapp.com/",
+    "version": "0.1.0",
+    "title": "San Diego Police Incident Data API Documentation",
     "contact": {
       "email": "kerry.sheldon@gmail.com"
-    },
-    "license": {
-      "name": "MIT",
-      "url": ""
     }
   },
   "host": "localhost:3000",
@@ -20,8 +16,8 @@
       "/incidents": {
         "get": {
           "tags": ["All Incidents"],
-          "summary": "Get police inidents.  Optional search by  by incident number, priority, beat, neighbrhood, street, street number, date, start date, end date, disposition code, disposition description, call type, and/or call type description)",
-          "description": "Get incidents by searching various fields",
+          "summary": "Get police inidents.  Optional search available for multiple fields",
+          "description": "Get incidents by searching various fields, including: incident number, priority, beat, neighbrhood, street, street number, date, start date, end date, disposition code, disposition description, call type, and/or call type description.",
           "parameters":[
            {
               "name":"number",
@@ -121,10 +117,103 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "current_user_url": {
+                  "incident number": {
                     "type": "string"
                   },
-                  "authorizations_url": {
+                  "date": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "beat": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "disposition code": {
+                    "type": "string"
+                  },
+                  "disposition description": {
+                    "type": "string"
+                  },
+                  "call type code": {
+                    "type": "string"
+                  },
+                  "call type description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/beats": {
+        "get": {
+          "tags": ["All Beats"],
+          "summary": "Get information on all police beats.  Includes beat number and neighborhood name",
+          "description": "Get all police beats",
+          "responses": {
+            "200": {
+              "description": "successfully returned beats",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/call_types": {
+        "get": {
+          "tags": ["All Call Types"],
+          "summary": "Get information on all call types for police incidents.  Includes call type code and description",
+          "description": "Get all call types",
+          "responses": {
+            "200": {
+              "description": "successfully returned call types",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/dispositions": {
+        "get": {
+          "tags": ["All Dispositions"],
+          "summary": "Get information on all disposition types for police incidents.  Includes disposition code and description",
+          "description": "Get all dispositions",
+          "responses": {
+            "200": {
+              "description": "successfully returned dispositions",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
                     "type": "string"
                   }
                 }
