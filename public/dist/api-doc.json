@@ -1,0 +1,226 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is documentation for the San Diego Police Department Incident API. The API is located at https://sandiego-police-data.herokuapp.com/",
+    "version": "0.1.0",
+    "title": "San Diego Police Incident Data API Documentation",
+    "contact": {
+      "email": "kerry.sheldon@gmail.com"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/api/v1/",
+  "produces": ["application/json"],
+  "schemes": ["http"],
+    "paths": {
+      "/incidents": {
+        "get": {
+          "tags": ["All Incidents"],
+          "summary": "Get police inidents.  Optional search available for multiple fields",
+          "description": "Get incidents by searching various fields, including: incident number, priority, beat, neighbrhood, street, street number, date, start date, end date, disposition code, disposition description, call type, and/or call type description.",
+          "parameters":[
+           {
+              "name":"number",
+              "in":"query",
+              "description":"The incident number for the incident you want to fetch.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"priority",
+              "in":"query",
+              "description":"The priority number of the incidents you want to fetch.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"beat",
+              "in":"query",
+              "description":"The beat number of the incidents you want to fetch.  See `/beats` endpoint to see all beats.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"neighborhood",
+              "in":"query",
+              "description":"The neighborhood of the incidents you want to fetch.  See `/beats` endpoint to see all beats with neighborhood names.",
+              "required":false,
+              "type":"number"
+           },
+           {
+              "name":"disp_code",
+              "in":"query",
+              "description":"The disposition code for the incidents you want to fetch.  A disposition is the 'result' of the incident - such as Arrest, Report, etc.  See `/dispositions` endpoint to see all dispositions.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"disp_desc",
+              "in":"query",
+              "description":"The disposition description for the incidents you want to fetch.  A disposition is the 'result' of the incident - such as Arrest, Report, etc.  See `/dispositions` endpoint to see all dispositions.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"call_code",
+              "in":"query",
+              "description":"The call type code for the incidents you want to fetch.  Call types categorize the nature of the incident when it was reported, such as Fire, Serious Injury Accident, etc.  See `/call_types` endpoint to see all call types.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"call_desc",
+              "in":"query",
+              "description":"The call type description for the incidents you want to fetch.  Call types categorize the nature of the incident when it was reported, such as Fire, Serious Injury Accident, etc.  See `/call_types` endpoint to see all call types.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"street",
+              "in":"query",
+              "description":"The street name for the incidents that you want to fetch.  Do NOT include street numbers, directions (N, S, etc) or suffixes (Dr., St., etc).",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"street_number",
+              "in":"query",
+              "description":"The street number for the incidents that you want to fetch.  This will often be chained with a street query described above.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"date",
+              "in":"query",
+              "description":"The date for the incidents that you want to fetch.  This will return all incidents on the date provided.  Date query must be provided in YYYY-MM-DD format.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"start_date",
+              "in":"query",
+              "description":"The start date for the incidents that you want to fetch.  Often used in combination with an end date query (see below).  If no end date is provided, it will return all incidents beginning on this date through the lastest date available in the data set. Start date query must be provided in YYYY-MM-DD format.",
+              "required":false,
+              "type":"string"
+           },
+           {
+              "name":"end_date",
+              "in":"query",
+              "description":"The end date for the incidents that you want to fetch.  Often used in combination with a start date query (see above).  If no start date is provided, it will return all incidents from the beginning of the data set through the end date provided. End date query must be provided in YYYY-MM-DD format.",
+              "required":false,
+              "type":"string"
+           }
+        ],
+          "responses": {
+            "200": {
+              "description": "successfully returned incidents",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "incident number": {
+                    "type": "string"
+                  },
+                  "date": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "priority": {
+                    "type": "string"
+                  },
+                  "beat": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "disposition code": {
+                    "type": "string"
+                  },
+                  "disposition description": {
+                    "type": "string"
+                  },
+                  "call type code": {
+                    "type": "string"
+                  },
+                  "call type description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/beats": {
+        "get": {
+          "tags": ["All Beats"],
+          "summary": "Get information on all police beats.  Includes beat number and neighborhood name",
+          "description": "Get all police beats",
+          "responses": {
+            "200": {
+              "description": "successfully returned beats",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "number": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/call_types": {
+        "get": {
+          "tags": ["All Call Types"],
+          "summary": "Get information on all call types for police incidents.  Includes call type code and description",
+          "description": "Get all call types",
+          "responses": {
+            "200": {
+              "description": "successfully returned call types",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/dispositions": {
+        "get": {
+          "tags": ["All Dispositions"],
+          "summary": "Get information on all disposition types for police incidents.  Includes disposition code and description",
+          "description": "Get all dispositions",
+          "responses": {
+            "200": {
+              "description": "successfully returned dispositions",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
