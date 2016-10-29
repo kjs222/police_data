@@ -13,10 +13,15 @@ var allIncidents = function(req, res) {
   if (searchQuery["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   } else {
-    models.Incident.findAndCountAll({where: searchQuery, offset: offset, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(results) {
-      customizeJsonKeys(results);
-      serializeIncidents(results);
-      return res.json(results);
+    models.Incident.findAndCountAll({where: searchQuery,
+                                     offset: offset,
+                                     limit: 100,
+                                     order: '"date" ASC',
+                                     include: [ models.Beat, models.Disposition, models.CallType ]})
+                    .then(function(results) {
+                                    customizeJsonKeys(results);
+                                    serializeIncidents(results);
+                                    return res.json(results);
     });
   };
 }
@@ -42,17 +47,22 @@ var transformQuery = function(query) {
   for(var searchItem in query) {
     if(queryHashMap[searchItem] === "page") {
       continue;
-    } else if(!queryHashMap[searchItem]) {
+    }
+    else if(!queryHashMap[searchItem]) {
       newQuery["invalid_parameter"] = query[searchItem];
-    } else if (searchItem === "date") {
+    }
+    else if (searchItem === "date") {
       var start = query[searchItem] + "T00:00:00.000Z"
       var end = query[searchItem] + "T23:59:59.000Z"
       newQuery[queryHashMap[searchItem]] = { between: [start, end]}
-    } else if (searchItem === "start_date"){
+    }
+    else if (searchItem === "start_date"){
       newQuery[queryHashMap[searchItem]] = { gte: new Date(query[searchItem])}
-    } else if (searchItem === "end_date"){
+    }
+    else if (searchItem === "end_date"){
       newQuery[queryHashMap[searchItem]] = { lt: new Date(query[searchItem])}
-    } else {
+    }
+    else {
       newQuery[queryHashMap[searchItem]] = query[searchItem];
     };
   };

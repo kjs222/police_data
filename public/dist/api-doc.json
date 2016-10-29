@@ -16,13 +16,13 @@
       "/incidents": {
         "get": {
           "tags": ["All Incidents"],
-          "summary": "Get police inidents.  Optional search available for multiple fields",
+          "summary": "Get police inidents.  Optional search available for multiple fields.  Returns 100 results at a time.  Use page parameter to get later results.",
           "description": "Get incidents by searching various fields, including: incident number, priority, beat, neighbrhood, street, street number, date, start date, end date, disposition code, disposition description, call type, and/or call type description.",
           "parameters":[
             {
                "name":"page",
                "in":"query",
-               "description":"The page number of the incidents you want to fetch.  Response is limited to 100 incidents.  The number of incidents matching the search parameters is provided in the response.  To get each subsequent set of results, use a page parameter to cycle through the results",
+               "description":"The page number of the incidents you want to fetch.  Each page provides 100 results. The number of incidents matching the search parameters is provided in the response.  To get each subsequent set of results, use a page parameter to cycle through the results",
                "required":false,
                "type":"string"
             },
