@@ -7,11 +7,14 @@ exports.getIncidents = function(req, res) {
 
 
 var allIncidents = function(req, res) {
+  var page = req.query["page"] || 1;
+  var offset = 100 * (page - 1);
   var searchQuery = mapQuery(req.query);
+
   if (searchQuery["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   } else {
-    models.Incident.findAll({where: searchQuery, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
+    models.Incident.findAll({where: searchQuery, offset: offset, limit: 100, include: [ models.Beat, models.Disposition, models.CallType ]}).then(function(incidents) {
       for(i in incidents) {
         incidents[i] = incidents[i].serialize();
       }
@@ -33,12 +36,15 @@ var queryHashMap = {number: "number",
                     street_dir: "street_dir",
                     date: "date",
                     start_date: "date",
-                    end_date: "date"};
+                    end_date: "date",
+                    page: "page"};
 
 var mapQuery = function(query) {
   var newQuery = {}
   for(var searchItem in query) {
-    if(!queryHashMap[searchItem]) {
+    if(queryHashMap[searchItem] === "page") {
+      continue;
+    } else if(!queryHashMap[searchItem]) {
       newQuery["invalid_parameter"] = query[searchItem];
     } else if (searchItem == "date") {
       var start = query[searchItem] + "T00:00:00.000Z"
