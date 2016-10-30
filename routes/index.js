@@ -9,7 +9,7 @@ var dispositionsController = require('../controllers/dispositions');
 var incidentsController = require('../controllers/incidents');
 
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.sendfile('public/index.html');
 });
 
 router.get('/documentation', function(req, res, next) {
