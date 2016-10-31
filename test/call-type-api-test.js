@@ -50,7 +50,7 @@ describe('CallType API', () => {
         var parsedCallType = JSON.parse(response.body)[0];
         var keys = Object.keys(parsedCallType);
         assert.isObject(parsedCallType);
-        assert.equal(keys.length, 3);
+        assert.equal(keys.length, 2);
         assert.include(keys, "code");
         assert.include(keys, "description");
         done();

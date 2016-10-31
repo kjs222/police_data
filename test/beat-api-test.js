@@ -50,7 +50,7 @@ describe('Beat API', () => {
         var parsedBeat = JSON.parse(response.body)[0]
         var keys = Object.keys(parsedBeat)
         assert.isObject(parsedBeat);
-        assert.equal(keys.length, 3);
+        assert.equal(keys.length, 2);
         assert.include(keys, "neighborhood");
         assert.include(keys, "number");
         done();
