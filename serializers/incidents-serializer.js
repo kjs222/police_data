@@ -53,7 +53,8 @@ IncidentsSerializer.prototype.customizeJsonKeys = function(results) {
   return results;
 }
 
-IncidentsSerializer.prototype.serializeIncidents = function(results) {
+IncidentsSerializer.prototype.serialize = function(results) {
+  this.customizeJsonKeys(results);
   for(i in results["incidents"]) {
     results["incidents"][i] = results["incidents"][i].serialize();
   }

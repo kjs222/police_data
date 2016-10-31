@@ -12,10 +12,9 @@ var allIncidents = function(req, res) {
   if (searchQuery["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   };
-  models.Incident.findByQuery(models, searchQuery)
+  models.Incident.findByQuery(models, searchQuery, req.query["page"])
   .then(function(results) {
-    incidentsSerializer.customizeJsonKeys(results);
-    incidentsSerializer.serializeIncidents(results);
+    incidentsSerializer.serialize(results);
     return res.json(results);
   });
 };

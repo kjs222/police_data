@@ -61,8 +61,8 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
       },
-      findByQuery: function(models, query) {
-        var page = query["page"] || 1;
+      findByQuery: function(models, query, page) {
+        var page = page || 1;
         var offset = 100 * (page - 1);
         return Incident.findAndCountAll({
                         where: query,
