@@ -60,6 +60,17 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
           }
         });
+      },
+      findByQuery: function(models, query, page) {
+        var page = page || 1;
+        var offset = 100 * (page - 1);
+        return Incident.findAndCountAll({
+                        where: query,
+                        offset: offset,
+                        limit: 100,
+                        order: '"date" ASC',
+                        include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
+        });
       }
     },
     underscored: true,
