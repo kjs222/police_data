@@ -6,27 +6,20 @@ exports.getIncidents = function(req, res) {
 };
 
 var allIncidents = function(req, res) {
-  var page = req.query["page"] || 1;
-  var offset = 100 * (page - 1);
-  var searchQuery = transformQuery(req.query);
-
-  if (searchQuery["invalid_parameter"]) {
-    return res.json({invalid_request: "unrecognized search parameter"})
-  } else {
-    models.Incident.findAndCountAll({where: searchQuery,
-                                     offset: offset,
-                                     limit: 100,
-                                     order: '"date" ASC',
-                                     include: [ models.Beat, models.Disposition, models.CallType ]})
-                    .then(function(results) {
-                                    customizeJsonKeys(results);
-                                    serializeIncidents(results);
-                                    return res.json(results);
+    var searchQuery = transformQuery(req.query);
+    if (searchQuery["invalid_parameter"]) {
+      return res.json({invalid_request: "unrecognized search parameter"})
+    };
+    models.Incident.findByQuery(models, searchQuery)
+                   .then(function(results) {
+                        customizeJsonKeys(results);
+                        serializeIncidents(results);
+                        return res.json(results);
     });
-  };
-}
+};
 
-var queryHashMap = {number:         "number",
+var paramsToModelFields =
+                   {number:         "number",
                     priority:       "priority",
                     beat:           "Beat.number",
                     neighborhood:   "Beat.neighborhood",
@@ -45,25 +38,25 @@ var queryHashMap = {number:         "number",
 var transformQuery = function(query) {
   var newQuery = {}
   for(var searchItem in query) {
-    if(queryHashMap[searchItem] === "page") {
+    if(paramsToModelFields[searchItem] === "page") {
       continue;
     }
-    else if(!queryHashMap[searchItem]) {
+    else if(!paramsToModelFields[searchItem]) {
       newQuery["invalid_parameter"] = query[searchItem];
     }
     else if (searchItem === "date") {
       var start = query[searchItem] + "T00:00:00.000Z"
       var end = query[searchItem] + "T23:59:59.000Z"
-      newQuery[queryHashMap[searchItem]] = { between: [start, end]}
+      newQuery[paramsToModelFields[searchItem]] = { between: [start, end]}
     }
     else if (searchItem === "start_date"){
-      newQuery[queryHashMap[searchItem]] = { gte: new Date(query[searchItem])}
+      newQuery[paramsToModelFields[searchItem]] = { gte: new Date(query[searchItem])}
     }
     else if (searchItem === "end_date"){
-      newQuery[queryHashMap[searchItem]] = { lt: new Date(query[searchItem])}
+      newQuery[paramsToModelFields[searchItem]] = { lt: new Date(query[searchItem])}
     }
     else {
-      newQuery[queryHashMap[searchItem]] = query[searchItem];
+      newQuery[paramsToModelFields[searchItem]] = query[searchItem];
     };
   };
   return newQuery;
