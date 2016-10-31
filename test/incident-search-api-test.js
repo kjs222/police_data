@@ -30,7 +30,7 @@ describe('Incident Search API', () => {
       var incNum = 'P16070041611'
       this.request.get('/api/v1/incidents?number=' + incNum, (error, response) => {
         if (error) { done(error); }
-        var parsedIncident = JSON.parse(response.body)[0]
+        var parsedIncident = JSON.parse(response.body).incidents[0]
         assert.equal(parsedIncident["incident number"], incNum);
         assert.equal(parsedIncident["neighborhood"], 'Pacific Beach');
         done();
@@ -41,7 +41,7 @@ describe('Incident Search API', () => {
       var priority = '3'
       this.request.get('/api/v1/incidents?priority=' + priority, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var parsedIncident = parsed[0];
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["priority"], priority);
@@ -54,8 +54,8 @@ describe('Incident Search API', () => {
       var beatNeighborhood = 'Pacific Beach';
       this.request.get('/api/v1/incidents?beat=' + beatNum, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
-        var parsedIncident = parsed[0]
+        var parsed = JSON.parse(response.body).incidents;
+        var parsedIncident = parsed[0];
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["beat"], beatNum);
         assert.equal(parsedIncident["neighborhood"], beatNeighborhood);
@@ -68,7 +68,7 @@ describe('Incident Search API', () => {
       var beatNeighborhood = 'Pacific Beach';
       this.request.get('/api/v1/incidents?neighborhood=' + beatNeighborhood, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var parsedIncident = parsed[0]
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["beat"], beatNum);
@@ -81,7 +81,7 @@ describe('Incident Search API', () => {
       var dispCode = 'K';
       this.request.get('/api/v1/incidents?disp_code=' + dispCode, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var parsedIncident = parsed[0];
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["disposition code"], dispCode);
@@ -94,7 +94,7 @@ describe('Incident Search API', () => {
       var dispCode = 'K';
       this.request.get('/api/v1/incidents?disp_desc=' + dispDescription, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var parsedIncident = parsed[0];
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["disposition code"], dispCode);
@@ -108,7 +108,7 @@ describe('Incident Search API', () => {
       var callCodeDescription = 'CHECK THE WELFARE';
       this.request.get('/api/v1/incidents?call_code=' + callCode, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var parsedIncident = parsed[0]
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["call type code"], callCode);
@@ -122,7 +122,7 @@ describe('Incident Search API', () => {
       var callCodeDescription = 'CHECK THE WELFARE';
       this.request.get('/api/v1/incidents?call_desc=' + callCodeDescription, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var parsedIncident = parsed[0]
         assert.isAtLeast(parsed.length, 100);
         assert.equal(parsedIncident["call type code"], callCode);
@@ -135,7 +135,7 @@ describe('Incident Search API', () => {
       var street = 'EL CAJON';
       this.request.get('/api/v1/incidents?street=' + street, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var parsedIncident = parsed[0]
         assert.notEqual(parsedIncident["address"].indexOf(street), -1);
         done();
@@ -146,7 +146,7 @@ describe('Incident Search API', () => {
       var streetNum = '4100'
       this.request.get('/api/v1/incidents?street_number=' + streetNum, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var parsedIncident = parsed[0];
         assert.notEqual(parsedIncident["address"].indexOf(streetNum), -1);
         done();
@@ -157,7 +157,7 @@ describe('Incident Search API', () => {
       var date = '2015-04-17';
       this.request.get('/api/v1/incidents?date=' + date, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var firstParsedIncident = parsed[0];
         var lastParsedIncident = parsed[parsed.length - 1];
         assert.notEqual(firstParsedIncident["date"].indexOf(date), -1);
@@ -172,7 +172,7 @@ describe('Incident Search API', () => {
       var end = '2015-04-18'
       this.request.get('/api/v1/incidents?start_date=' + start + '&end_date=' + end, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var firstParsedIncident = parsed[0]
         var lastParsedIncident = parsed[parsed.length - 1]
         assert.equal(firstParsedIncident["date"].indexOf("2015-04-16"), -1);
@@ -188,7 +188,7 @@ describe('Incident Search API', () => {
       var callCode = 'CW';
       this.request.get('/api/v1/incidents?date=' + date + '&call_code=' + callCode, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body).incidents
         var firstParsedIncident = parsed[0];
         var lastParsedIncident = parsed[parsed.length - 1];
         assert.notEqual(firstParsedIncident["date"].indexOf(date), -1);
@@ -204,7 +204,7 @@ describe('Incident Search API', () => {
       var searchCode = 'cW';
       this.request.get('/api/v1/incidents?neighborhood='+ searchNeigh+'&call_code=' + searchCode, (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body);
+        var parsed = JSON.parse(response.body).incidents;
         var firstParsedIncident = parsed[0];
         var lastParsedIncident = parsed[parsed.length - 1];
         assert.equal(firstParsedIncident["neighborhood"], "Pacific Beach");
@@ -219,7 +219,7 @@ describe('Incident Search API', () => {
       var badParam = 'bad';
       this.request.get('/api/v1/incidents?'+ badParam+'=not a param', (error, response) => {
         if (error) { done(error); }
-        var parsed = JSON.parse(response.body)
+        var parsed = JSON.parse(response.body);
         assert.deepEqual(parsed, {"invalid_request": "unrecognized search parameter"});
         done();
       });

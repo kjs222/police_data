@@ -25,11 +25,21 @@ describe('Incident API', () => {
   });
 
   describe('GET /api/v1/incidents', () => {
+
+    it('should return count of total incidents', (done) => {
+      this.request.get('/api/v1/incidents', (error, response) => {
+        if (error) { done(error); }
+        var parsed = JSON.parse(response.body)
+        assert.isNotNaN(parseInt(parsed.total_incidents));
+        done();
+      });
+    });
+
     it('should return an array of incidents', (done) => {
       this.request.get('/api/v1/incidents', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        assert.isArray(parsed);
+        assert.isArray(parsed.incidents);
         done();
       });
     });
@@ -39,7 +49,7 @@ describe('Incident API', () => {
       this.request.get('/api/v1/incidents', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        assert.equal(parsed.length, numIncidentsPerPage);
+        assert.equal(parsed.incidents.length, numIncidentsPerPage);
         done();
       });
     });
@@ -47,9 +57,9 @@ describe('Incident API', () => {
     it('should return incidents with correct keys', (done) => {
       this.request.get('/api/v1/incidents', (error, response) => {
         if (error) { done(error); }
-        var parsedIncident = JSON.parse(response.body)[0];
-        var keys = Object.keys(parsedIncident);
-        assert.isObject(parsedIncident);
+        var parsedJson = JSON.parse(response.body);
+        var keys = Object.keys(parsedJson.incidents[0]);
+        assert.isObject(parsedJson);
         assert.equal(keys.length, 10);
         assert.equal(keys.indexOf("incident number"), 0);
         assert.equal(keys.indexOf("date"), 1);
@@ -62,6 +72,33 @@ describe('Incident API', () => {
         assert.equal(keys.indexOf("call type code"), 8);
         assert.equal(keys.indexOf("call type description"), 9);
         done();
+      });
+    });
+
+    it('should paginate results', (done) => {
+      var page = 2;
+      var numIncidentsPerPage = 100;
+      this.request.get('/api/v1/incidents?page=' + page, (error, response) => {
+        if (error) { done(error); }
+        var parsedJson = JSON.parse(response.body);
+        assert.equal(parsedJson.incidents.length, numIncidentsPerPage);
+        done();
+      });
+    });
+
+    xit('should paginate results and return different incidents', (done) => {
+      var page = 2;
+
+      this.request.get('/api/v1/incidents', (error, response) => {
+        var pageOneResults = JSON.parse(response.body).incidents;
+        //pageOneResults is not getting passed in to callback on second ajax calll
+        this.request.get('/api/v1/incidents?page=' + page, (error, response, pageOneResults) => {
+          var pageTwoResults = JSON.parse(response.body).incidents;
+          console.log("page1", pageOneResults[0]);
+          console.log("page2", pageTwoResults[0]);
+          assert.notEqual(pageOneResults, pageTwoResults)
+          done();
+        });
       });
     });
 
