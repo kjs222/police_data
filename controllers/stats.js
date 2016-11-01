@@ -8,7 +8,7 @@ exports.getOverviewStats = function(req, res) {
 };
 
 exports.getDispCategoryStats = function(req, res) {
-  models.Beat.summaryStatsByDispCategory().then(function(stats) {
+  models.Beat.statsByDispCategory().then(function(stats) {
      return res.json(stats)
   });
 };
