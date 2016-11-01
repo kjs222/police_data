@@ -29,8 +29,11 @@ router.route('/api/v1/beats')
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
 
-router.route('/api/v1/stats/neighborhood_stats')
-  .get(statsController.getNeighborhoodStats);
+router.route('/api/v1/stats/overview_stats')
+  .get(statsController.getOverviewStats);
+
+router.route('/api/v1/stats/disposition_category_stats')
+  .get(statsController.getDispCategoryStats);
 
 module.exports = router;
 

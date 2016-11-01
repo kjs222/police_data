@@ -69,9 +69,29 @@ describe('Routes', () => {
     });
   });
 
-  describe('GET /api/v1/dispositions', () => {
+  describe('GET /api/v1/beats', () => {
     it('should return a 200', (done) => {
       this.request.get('/api/v1/beats', (error, response) => {
+        if (error) { done(error); }
+        assert.equal(response.statusCode, 200);
+        done();
+      });
+    });
+  });
+
+  describe('GET /api/v1/stats/overview_stats', () => {
+    it('should return a 200', (done) => {
+      this.request.get('/api/v1/stats/overview_stats', (error, response) => {
+        if (error) { done(error); }
+        assert.equal(response.statusCode, 200);
+        done();
+      });
+    });
+  });
+
+  describe('GET /api/v1/stats/disposition_category_stats', () => {
+    it('should return a 200', (done) => {
+      this.request.get('/api/v1/stats/disposition_category_stats', (error, response) => {
         if (error) { done(error); }
         assert.equal(response.statusCode, 200);
         done();
