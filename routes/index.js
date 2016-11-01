@@ -7,6 +7,7 @@ var callTypesController = require('../controllers/calltypes');
 var beatsController = require('../controllers/beats');
 var dispositionsController = require('../controllers/dispositions');
 var incidentsController = require('../controllers/incidents');
+var statsController = require('../controllers/stats');
 
 router.get('/', function(req, res, next) {
   res.sendfile('public/index.html');
@@ -27,6 +28,9 @@ router.route('/api/v1/beats')
 
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
+
+router.route('/api/v1/stats/neighborhood_stats')
+  .get(statsController.getNeighborhoodStats);
 
 module.exports = router;
 
