@@ -64,6 +64,7 @@ var renderNeighborhoodStatsChart = function(stats) {
 
 }
 
-$.get('/api/v1/stats/neighborhood_stats', function(stats) {
+
+$.get('/api/v1/stats/overview_stats', function(stats) {
     renderNeighborhoodStatsChart(stats);
 });

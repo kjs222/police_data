@@ -1,8 +1,17 @@
 var models  = require('../models');
-const querystring = require('querystring');
+var StatsSerializer = require('../serializers/stats-serializer')
+var statsSerializer = new StatsSerializer();
 
-exports.getNeighborhoodStats = function(req, res) {
+exports.getOverviewStats = function(req, res) {
   models.Beat.summaryStats().then(function(stats) {
+     return res.json(stats)
+  });
+};
+
+exports.getDispCategoryStats = function(req, res) {
+  var neighborhood = req.query["neighborhood"] || "Gaslamp";
+  models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
+     statsSerializer.serializeDispositionStats(stats);
      return res.json(stats)
   });
 };

@@ -26,11 +26,17 @@ router.route('/api/v1/dispositions')
 router.route('/api/v1/beats')
   .get(beatsController.getBeats);
 
+router.route('/api/v1/neighborhood_names')
+  .get(beatsController.getNeighborhoodNames);
+
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
 
-router.route('/api/v1/stats/neighborhood_stats')
-  .get(statsController.getNeighborhoodStats);
+router.route('/api/v1/stats/overview_stats')
+  .get(statsController.getOverviewStats);
+
+router.route('/api/v1/stats/disposition_category_stats')
+  .get(statsController.getDispCategoryStats);
 
 module.exports = router;
 

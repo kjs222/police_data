@@ -9,6 +9,13 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Beat.hasMany(models.Incident);
       },
+      neighborhoodNames: function() {
+        return Beat.findAll({ order: '"neighborhood" ASC',
+                              attributes: ['neighborhood'],
+                              where: {neighborhood: { ne: null } }
+                            })
+
+      },
       incidentCount: function() {
         return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_incidents FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id GROUP BY Beat.id, Beat.neighborhood")
       },
@@ -50,6 +57,9 @@ module.exports = function(sequelize, DataTypes) {
                                updateMasterWithTransient +
                                finalMasterTable +
                                dropTables )
+      },
+      statsByDispCategory: function(neighborhood) {
+        return sequelize.query("select beats.id, beats.neighborhood, substr(dispositions.code, 1, 1) as type, date_part('month', incidents.date) as month, CAST(count(*) AS INTEGER) as incidents from beats left outer join incidents on beats.id = incidents.beat_id left outer join dispositions on incidents.disposition_id = dispositions.id where beats.neighborhood ='" + neighborhood + "' AND substr(dispositions.code, 1, 1) IN ('A', 'R', 'K', 'U', 'O') group by beats.id, beats.neighborhood, substr(dispositions.code, 1, 1), date_part('month', incidents.date);")
       }
     },
     underscored: true,
