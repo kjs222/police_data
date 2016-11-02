@@ -1,5 +1,5 @@
 function StatsSerializer() {
-    this.intToMonth = { 1: "January",
+    this.intToMonth = {   1: "January",
                           2: "February",
                           3: "March",
                           4: "April",
@@ -10,14 +10,13 @@ function StatsSerializer() {
                           9: "September",
                           10: "October",
                           11: "November",
-                          12: "December"
-                        };
-    this.abrevToType = {"A": "Arrest",
-                        "R": "Report",
-                        "K": "No Report",
-                        "U": "Unfounded",
-                        "O": "Other"}
-                        }
+                          12: "December"};
+    this.abrevToType =   {"A": "Arrest",
+                          "R": "Report",
+                          "K": "No Report",
+                          "U": "Unfounded",
+                          "O": "Other"}
+}
 
 StatsSerializer.prototype.serializeDispositionStats = function(results) {
     results.forEach(function(result) {

@@ -26,6 +26,9 @@ router.route('/api/v1/dispositions')
 router.route('/api/v1/beats')
   .get(beatsController.getBeats);
 
+router.route('/api/v1/neighborhood_names')
+  .get(beatsController.getNeighborhoodNames);
+
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
 
