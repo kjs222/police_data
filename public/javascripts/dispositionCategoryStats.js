@@ -21,17 +21,16 @@ var prepareChartArea = function(chartElementId, neighborhood) {
   var element = $(chartElementId);
   $(element).empty();
   $(element).prev(".neigh-title").text(neighborhood);
+  $(".neigh-input").val("");
 }
 
 var renderNeighborhoodDropDownList = function() {
   var dataLists = $(".neigh-dropdown");
   $.get('/api/v1/neighborhood_names', function(names) {
       names.forEach(function(name) {
-        var option = document.createElement('option');
-        option.value = name;
-        option.className = "neigh-selection";
+        var option = '<option value="'+ name + '" class="neigh-selection"></option>'
         dataLists.each(function() {
-          this.append(option);
+          $(this).append(option);
         });
       });
     listenForNeighborhoodRequest(names);
@@ -58,8 +57,6 @@ var renderErrorMessage = function(element) {
 var removeErrorMessages = function(element) {
   $(".error").remove();
 }
-
-
 
 $(document).ready(function() {
   renderNeighborhoodDropDownList();
