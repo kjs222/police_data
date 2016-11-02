@@ -15,3 +15,12 @@ exports.getDispCategoryStats = function(req, res) {
      return res.json(stats)
   });
 };
+
+exports.getNeighIncidentStats = function(req, res) {
+  var neighborhood = req.query["neighborhood"];
+  var monthStart = req.query["month"];
+  models.Incident.findByNeighAndMonth(models, neighborhood, monthStart).then(function(stats) {
+    //  statsSerializer.serializeDispositionStats(stats);
+     return res.json(stats)
+  });
+};

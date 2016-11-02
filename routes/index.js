@@ -38,6 +38,9 @@ router.route('/api/v1/stats/overview_stats')
 router.route('/api/v1/stats/disposition_category_stats')
   .get(statsController.getDispCategoryStats);
 
+router.route('/api/v1/stats/neigh_incident_stats')
+  .get(statsController.getNeighIncidentStats);
+
 module.exports = router;
 
 if (!module.parent) {

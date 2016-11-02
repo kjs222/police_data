@@ -15,12 +15,14 @@ function IncidentsSerializer() {
                            date:           "date",
                            start_date:     "date",
                            end_date:       "date",
+                           month:          "date",
                            page:           "page"}
                         }
 
 IncidentsSerializer.prototype.transformQuery = function(query) {
   var newQuery = {}
   for(var searchItem in query) {
+    console.log(searchItem);
     if(this.paramsToFields[searchItem] === "page") {
       continue;
     }
@@ -38,6 +40,13 @@ IncidentsSerializer.prototype.transformQuery = function(query) {
     else if (searchItem === "end_date"){
       newQuery[this.paramsToFields[searchItem]] = { lt: new Date(query[searchItem])}
     }
+    else if (searchItem === "month"){
+      var start = new Date(query[searchItem]);
+      var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
+      newQuery[this.paramsToFields[searchItem]] = { gte: start };
+      newQuery[this.paramsToFields[searchItem]] = { lt: end };
+    }
+
     else {
       newQuery[this.paramsToFields[searchItem]] = query[searchItem];
     };
