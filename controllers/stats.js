@@ -1,5 +1,6 @@
 var models  = require('../models');
-const querystring = require('querystring');
+var StatsSerializer = require('../serializers/stats-serializer')
+var statsSerializer = new StatsSerializer();
 
 exports.getOverviewStats = function(req, res) {
   models.Beat.summaryStats().then(function(stats) {
@@ -10,6 +11,7 @@ exports.getOverviewStats = function(req, res) {
 exports.getDispCategoryStats = function(req, res) {
   var neighborhood = req.query["neighborhood"] || "Gaslamp";
   models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
+     statsSerializer.serializeDispositionStats(stats);
      return res.json(stats)
   });
 };
