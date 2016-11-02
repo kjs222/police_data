@@ -74,7 +74,7 @@ module.exports = function(sequelize, DataTypes) {
                         include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
         });
       },
-      findByNeighAndMonth: function(models, neighborhood, monthStart) {
+      findByNeighAndMonth: function(models, neighborhood, monthStart, code) {
         var start = new Date(monthStart);
         var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
         var monthEnd = (end.getMonth() + 1) + '/' + end.getDate() + '/' +  end.getFullYear();
@@ -82,7 +82,10 @@ module.exports = function(sequelize, DataTypes) {
         return Incident.findAll({
                         where: {'Beat.neighborhood': neighborhood,
                                 'date': {gte: monthStart, lt: monthEnd},
-                                'Disposition.code': {like: '%A'}
+                                'Disposition.code': {like: "%" + code },
+                                // 'Disposition.code': {like: '%K'},
+                                // 'Disposition.code': {like: '%R'},
+                                // 'Disposition.code': {like: '%U'},
                         },
                         order: '"date" ASC',
                         include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]

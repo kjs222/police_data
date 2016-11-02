@@ -19,9 +19,10 @@ exports.getDispCategoryStats = function(req, res) {
 exports.getNeighIncidentStats = function(req, res) {
   var neighborhood = req.query["neighborhood"];
   var monthStart = req.query["month"];
-  models.Incident.findByNeighAndMonth(models, neighborhood, monthStart).then(function(stats) {
+  var code = req.query["code"];
+  models.Incident.findByNeighAndMonth(models, neighborhood, monthStart, code).then(function(stats) {
     for(i in stats) {
-        // console.log(stats[i])
+        stats[i] = stats[i].serialize();
     }
      return res.json(stats)
   });
