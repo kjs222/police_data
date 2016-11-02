@@ -51,10 +51,9 @@ module.exports = function(sequelize, DataTypes) {
                                finalMasterTable +
                                dropTables )
       },
-      statsByDispCategory: function(neighborhood1, neighborhood2) {
-        var neigh1 = neighborhood1 || "Gaslamp";
-        var neigh2 = neighborhood2 || "La Jolla";
-        return sequelize.query("select beats.id, beats.neighborhood, substr(dispositions.code, 1, 1) as code, date_part('month', incidents.date) as month, CAST(count(*) AS INTEGER) from beats left outer join incidents on beats.id = incidents.beat_id left outer join dispositions on incidents.disposition_id = dispositions.id where beats.neighborhood IN ('" + neigh1 +"', '"+ neigh2 + "') AND substr(dispositions.code, 1, 1) IN ('A', 'R', 'K', 'U', 'O') group by beats.id, beats.neighborhood, substr(dispositions.code, 1, 1), date_part('month', incidents.date);")
+      statsByDispCategory: function(neighborhood) {
+        var neighborhood = neighborhood || "Gaslamp";
+        return sequelize.query("select beats.id, beats.neighborhood, substr(dispositions.code, 1, 1) as type, date_part('month', incidents.date) as month, CAST(count(*) AS INTEGER) as incidents from beats left outer join incidents on beats.id = incidents.beat_id left outer join dispositions on incidents.disposition_id = dispositions.id where beats.neighborhood ='" + neighborhood + "' AND substr(dispositions.code, 1, 1) IN ('A', 'R', 'K', 'U', 'O') group by beats.id, beats.neighborhood, substr(dispositions.code, 1, 1), date_part('month', incidents.date);")
       }
     },
     underscored: true,

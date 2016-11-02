@@ -50,13 +50,13 @@ describe('Stats API', () => {
 
   describe('GET /api/v1/stats/disposition_category_stats', () => {
 
-    it('should return an overview by neighborhood', (done) => {
+    it('should return one record per month and disp category', (done) => {
       this.request.get('/api/v1/stats/disposition_category_stats', (error, response) => {
         if (error) { done(error); }
         var parsed = JSON.parse(response.body)
-        var neighborhoodStats = parsed[0]
-        var expectedDataPoints = ["id", "neighborhood", "num_arrests", "num_reports", "num_no_reports", "num_unfounded", "num_other"]
-        assert.deepEqual(Object.keys(neighborhoodStats), expectedDataPoints);
+        var singleRecord = parsed[0]
+        var expectedDataPoints = ["id", "neighborhood", "type", "month", "incidents"]
+        assert.deepEqual(Object.keys(singleRecord), expectedDataPoints);
         done();
       });
     });
@@ -64,9 +64,9 @@ describe('Stats API', () => {
     it('should return data for all neighborhoods', (done) => {
       this.request.get('/api/v1/stats/disposition_category_stats', (error, response) => {
         if (error) { done(error); }
-        var num_neighborhoods = 125;
+        var num_records_per_neighborhood = 60;
         var parsed = JSON.parse(response.body);
-        assert.equal(parsed.length, num_neighborhoods);
+        assert.equal(parsed.length, num_records_per_neighborhood);
         done();
       });
     });
