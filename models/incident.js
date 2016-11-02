@@ -77,8 +77,16 @@ module.exports = function(sequelize, DataTypes) {
       findByNeighAndMonth: function(models, neighborhood, monthStart) {
         var start = new Date(monthStart);
         var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
-        var monthEnd = (end.getMonth() + 1) + '/' + end.getDate() + '/' +  end.getFullYear()
-        return sequelize.query("SELECT Incident.id, Incident.number, Incident.date, Incident.street_number, Incident.street_dir, Incident.street, Incident.street_type, Incident.street_dir2, Incident.street_name2, Incident.street_type2, Incident.priority, Incident.beat_id, Incident.call_type_id, Incident.disposition_id, Beat.id, Beat.number, Beat.neighborhood, Disposition.id, Disposition.code, Disposition.description, CallType.id, CallType.code, CallType.description FROM incidents AS Incident LEFT OUTER JOIN beats AS Beat ON Beat.id = Incident.beat_id LEFT OUTER JOIN dispositions AS Disposition ON Disposition.id = Incident.disposition_id LEFT OUTER JOIN call_types AS CallType ON CallType.id = Incident.call_type_id WHERE Beat.neighborhood ='" + neighborhood + "' AND Incident.date BETWEEN '" + monthStart + "' AND '" + monthEnd + "'")
+        var monthEnd = (end.getMonth() + 1) + '/' + end.getDate() + '/' +  end.getFullYear();
+        console.log(start, monthStart, end, monthEnd)
+        return Incident.findAll({
+                        where: {'Beat.neighborhood': neighborhood,
+                                'date': {gte: monthStart, lt: monthEnd},
+                                'Disposition.code': {like: '%A'}
+                        },
+                        order: '"date" ASC',
+                        include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
+                      });
       }
     },
     underscored: true,

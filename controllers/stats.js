@@ -20,7 +20,9 @@ exports.getNeighIncidentStats = function(req, res) {
   var neighborhood = req.query["neighborhood"];
   var monthStart = req.query["month"];
   models.Incident.findByNeighAndMonth(models, neighborhood, monthStart).then(function(stats) {
-    //  statsSerializer.serializeDispositionStats(stats);
+    for(i in stats) {
+        // console.log(stats[i])
+    }
      return res.json(stats)
   });
 };
