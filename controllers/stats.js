@@ -8,7 +8,8 @@ exports.getOverviewStats = function(req, res) {
 };
 
 exports.getDispCategoryStats = function(req, res) {
-  models.Beat.statsByDispCategory().then(function(stats) {
+  var neighborhood = req.query["neighborhood"] || "Gaslamp";
+  models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
      return res.json(stats)
   });
 };

@@ -61,12 +61,32 @@ describe('Stats API', () => {
       });
     });
 
-    it('should return data for all neighborhoods', (done) => {
+    it('should return data for categories for all months neighborhoods', (done) => {
       this.request.get('/api/v1/stats/disposition_category_stats', (error, response) => {
         if (error) { done(error); }
         var num_records_per_neighborhood = 60;
         var parsed = JSON.parse(response.body);
         assert.equal(parsed.length, num_records_per_neighborhood);
+        done();
+      });
+    });
+
+    it('should return data for default neighborhood if none given', (done) => {
+      this.request.get('/api/v1/stats/disposition_category_stats', (error, response) => {
+        if (error) { done(error); }
+        var defaultNeighborhood = "Gaslamp";
+        var singleRecord = JSON.parse(response.body)[0];
+        assert.equal(singleRecord["neighborhood"], defaultNeighborhood);
+        done();
+      });
+    });
+
+    it('should return data for user provided neighborhood if one given', (done) => {
+      var userNeighborhood = "Talmadge"
+      this.request.get('/api/v1/stats/disposition_category_stats?neighborhood=' + userNeighborhood, (error, response) => {
+        if (error) { done(error); }
+        var singleRecord = JSON.parse(response.body)[0];
+        assert.equal(singleRecord["neighborhood"], userNeighborhood);
         done();
       });
     });
