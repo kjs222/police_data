@@ -51,7 +51,7 @@ var listenForNeighborhoodRequest = function(allNeighNames) {
 }
 
 var renderErrorMessage = function(element) {
-  element.after("<span><p class='error'>Please select a valid neighbohrood</p>");
+  element.after("<p class='error'>Please select a valid neighbohrood</p>");
 }
 
 var removeErrorMessages = function(element) {
