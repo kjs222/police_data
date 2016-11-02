@@ -1,7 +1,7 @@
-var renderDispositionCategoryChart = function(element, neighborhood) {
-  $(element).empty();
+var renderDispositionCategoryChart = function(elementId, neighborhood) {
+  prepareChartArea(elementId, neighborhood);
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(data){
-    var svg = dimple.newSvg(element, 400, 400);
+    var svg = dimple.newSvg(elementId, 400, 400);
     var myChart = new dimple.chart(svg, data);
     myChart.setBounds(70, 30, 200, 330);
     var x = myChart.addCategoryAxis("x", "month");
@@ -10,11 +10,17 @@ var renderDispositionCategoryChart = function(element, neighborhood) {
     var s = myChart.addSeries(["neighborhood", "type"], dimple.plot.area);
     s.lineWeight = 1;
     s.barGap = 0.05;
-    if (element === "#disp-cat-2") {
+    if (elementId === "#disp-cat-2") {
       myChart.addLegend(300, 20, 100, 300, "left");
     }
     myChart.draw();
   });
+}
+
+var prepareChartArea = function(chartElementId, neighborhood) {
+  var element = $(chartElementId);
+  $(element).empty();
+  $(element).prev(".neigh-title").text(neighborhood);
 }
 
 var renderNeighborhoodDropDownList = function() {
@@ -35,7 +41,7 @@ var renderNeighborhoodDropDownList = function() {
 var listenForNeighborhoodRequest = function(allNeighNames) {
   $(".neigh-select").on("click", function(e){
     removeErrorMessages();
-    var chartElementId = "#" + $($(this).next(".chart")).attr('id');
+    var chartElementId = "#" + $($(this).nextAll(".chart:first")).attr("id");
     var selectedNeigh = $("#" + $(this).attr("target")).val();
     if(allNeighNames.indexOf(selectedNeigh) === -1 ) {
       renderErrorMessage($(this));
@@ -46,7 +52,7 @@ var listenForNeighborhoodRequest = function(allNeighNames) {
 }
 
 var renderErrorMessage = function(element) {
-  element.after("<p class='error'>Please select a valid neighbohrood</p>");
+  element.after("<span><p class='error'>Please select a valid neighbohrood</p>");
 }
 
 var removeErrorMessages = function(element) {
