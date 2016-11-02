@@ -10,14 +10,10 @@ exports.getBeats = function(req, res) {
 };
 
 exports.getNeighborhoodNames = function(req, res) {
-  models.Beat.findAll({ order: '"neighborhood" ASC',
-                        attributes: ['neighborhood'],
-                        where: {neighborhood: { ne: null } }
-                      })
-              .then(function(neighborhoodNames) {
-                  var names = neighborhoodNames.map(function(name){
-                    return name["neighborhood"];
-                  });
-                  return res.json(names);
+  models.Beat.neighborhoodNames().then(function(neighborhoodNames) {
+    var names = neighborhoodNames.map(function(name){
+      return name["neighborhood"];
+    });
+    return res.json(names);
   });
 };

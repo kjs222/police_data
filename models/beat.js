@@ -9,6 +9,13 @@ module.exports = function(sequelize, DataTypes) {
       associate: function(models) {
         Beat.hasMany(models.Incident);
       },
+      neighborhoodNames: function() {
+        return Beat.findAll({ order: '"neighborhood" ASC',
+                              attributes: ['neighborhood'],
+                              where: {neighborhood: { ne: null } }
+                            })
+
+      },
       incidentCount: function() {
         return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_incidents FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id GROUP BY Beat.id, Beat.neighborhood")
       },

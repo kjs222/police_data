@@ -13,10 +13,18 @@
   </head>
   <body>
     <div class="chart" id="neighborhood-stats"></div>
-    <div class="chart col-sm-4" id="disp-cat-1"></div>
-    <div class="chart col-sm-4" id="disp-cat-2"></div>
 
+    <div class="col-sm-4">
+      <input class="neigh-inputs" type="text" id="neigh-1" list="neigh-1-list" placeholder="e.g. Gaslamp">
+      <datalist class="neigh-dropdown" id="neigh-1-list"></datalist>
+      <div class="chart" id="disp-cat-1"></div>
+    </div>
 
+    <div class="col-sm-4">
+      <input class="neigh-input" type="text" id="neigh-2" list="neigh-2-list" placeholder="e.g. Gaslamp">
+      <datalist class="neigh-dropdown" id="neigh-2-list"></datalist>
+      <div class="chart" id="disp-cat-2"></div>
+    </div>
 
     <script src='javascripts/neighborhoodStats.js' type='text/javascript'></script>
     <script src='javascripts/dispositionCategoryStats.js' type='text/javascript'></script>

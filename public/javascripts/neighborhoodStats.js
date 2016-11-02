@@ -64,6 +64,20 @@ var renderNeighborhoodStatsChart = function(stats) {
 
 }
 
+var renderNeighborhoodDropDownList = function() {
+  var dataLists = $(".neigh-dropdown");
+  $.get('/api/v1/neighborhood_names', function(names) {
+      names.forEach(function(name) {
+        var option = document.createElement('option');
+        option.value = name;
+        dataLists.each(function() {
+          this.append(option);
+        });
+      });
+  })
+}
+
 $.get('/api/v1/stats/overview_stats', function(stats) {
+    renderNeighborhoodDropDownList();
     renderNeighborhoodStatsChart(stats);
 });
