@@ -1,6 +1,7 @@
 var renderDispositionCategoryChart = function(elementId, neighborhood) {
   prepareChartArea(elementId, neighborhood);
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(data){
+    var data = data.length === 2 ? data[0] : data;
     var svg = dimple.newSvg(elementId, 400, 400);
     var myChart = new dimple.chart(svg, data);
     myChart.setBounds(70, 30, 200, 330);

@@ -66,5 +66,6 @@ var renderNeighborhoodStatsChart = function(stats) {
 
 
 $.get('/api/v1/stats/overview_stats', function(stats) {
+    var stats = stats.length === 2 ? stats[0] : stats;
     renderNeighborhoodStatsChart(stats);
 });

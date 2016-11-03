@@ -47,7 +47,7 @@ module.exports = function(sequelize, DataTypes) {
 
         var dropTables = "DROP TABLE pstats; DROP TABLE pstats_a; DROP TABLE pstats_m; DROP TABLE pstats_t;";
 
-
+        sequelize.query("set footer off");
         return sequelize.query(masterTempTable +
                                arrestTempTable +
                                updateMasterWithArrests +
@@ -59,6 +59,7 @@ module.exports = function(sequelize, DataTypes) {
                                dropTables )
       },
       statsByDispCategory: function(neighborhood) {
+        sequelize.query("set footer off");
         return sequelize.query("select beats.id, beats.neighborhood, substr(dispositions.code, 1, 1) as type, date_part('month', incidents.date) as month, CAST(count(*) AS INTEGER) as incidents from beats left outer join incidents on beats.id = incidents.beat_id left outer join dispositions on incidents.disposition_id = dispositions.id where beats.neighborhood ='" + neighborhood + "' AND substr(dispositions.code, 1, 1) IN ('A', 'R', 'K', 'U', 'O') group by beats.id, beats.neighborhood, substr(dispositions.code, 1, 1), date_part('month', incidents.date);")
       }
     },
