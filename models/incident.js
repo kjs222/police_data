@@ -1,5 +1,6 @@
 'use strict';
 var models  = require('../models');
+var dateFormat = require('dateformat');
 
 module.exports = function(sequelize, DataTypes) {
   var Incident = sequelize.define('Incident', {
@@ -26,9 +27,12 @@ module.exports = function(sequelize, DataTypes) {
         }
         return formatted;
       },
+      formatDate: function() {
+        return dateFormat(this.date, "dd mmm yyyy HH:MM");
+      },
       serialize: function() {
         return {"incident number": this.number,
-                "date": this.date,
+                "date": this.formatDate(),
                 "address": this.formatAddress(),
                 "priority": this.priority,
                 "beat": this.Beat.number,
@@ -74,18 +78,15 @@ module.exports = function(sequelize, DataTypes) {
                         include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
         });
       },
-      findByNeighAndMonth: function(models, neighborhood, monthStart, code) {
-        var start = new Date(monthStart);
+      findByNeighAndMonth: function(models, query) {
+        var neighborhood = query["neighborhood"];
+        var code = query["code"];
+        var start = new Date(query["month"]);
         var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
-        var monthEnd = (end.getMonth() + 1) + '/' + end.getDate() + '/' +  end.getFullYear();
-        console.log(start, monthStart, end, monthEnd)
         return Incident.findAll({
                         where: {'Beat.neighborhood': neighborhood,
-                                'date': {gte: monthStart, lt: monthEnd},
+                                'date': {gte: start, lt: end},
                                 'Disposition.code': {like: "%" + code },
-                                // 'Disposition.code': {like: '%K'},
-                                // 'Disposition.code': {like: '%R'},
-                                // 'Disposition.code': {like: '%U'},
                         },
                         order: '"date" ASC',
                         include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
