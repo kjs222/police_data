@@ -34,7 +34,6 @@ var renderNeighborhoodIncidentsChart = function(data) {
   var filterValues = dimple.getUniqueValues(data, "call type description");
   myLegend.shapes.selectAll("rect")
     .on("click", function (e) {
-      console.log("clicked")
       var hide = false;
       var newFilters = [];
       filterValues.forEach(function (f) {
@@ -57,12 +56,17 @@ var renderNeighborhoodIncidentsChart = function(data) {
 };
 
 var chartNeighborhoodIncidents = function(neighborhood, month, code) {
-  var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=" + code;
-  $.get('/api/v1/stats/neigh_incident_stats' + queryString, function(stats) {
-      renderNeighborhoodIncidentsChart(stats);
+  var stats
+  var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=";
+  $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%A", function(arrestStats) {
+      stats = arrestStats;
+      $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%R", function(reportStats) {
+        stats = stats.concat(reportStats);
+        renderNeighborhoodIncidentsChart(stats);
+      });
   });
 };
 
 $(document).ready(function(){
-  chartNeighborhoodIncidents("Gaslamp", "01/01/15", "A");
+  chartNeighborhoodIncidents("Talmadge", "01/01/15", "A");
 })
