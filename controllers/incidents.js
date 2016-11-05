@@ -19,10 +19,12 @@ var allIncidents = function(req, res) {
   });
 };
 
-
 exports.getMonthYears = function(req, res) {
   models.Incident.getMonthYears()
   .then(function(results) {
-    return res.json(results);
+    var monthYears = results.map(function(result){
+      return result["month_years"];
+    });
+    return res.json(monthYears);
   });
 };

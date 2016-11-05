@@ -32,24 +32,24 @@
 
 
     <div class="tab-container">
-      <h4 class="tab active-tab" target="area-chart">another Week</h5>
-      <h4 class='tab' target="bubble-chart">Current Week</h5>
-      <h4 class="tab" target="scatter-chart">Next Week</h5>
+      <h4 class="tab active-tab" target="area-chart">Compare Neighborhoods</h5>
+      <h4 class='tab' target="bubble-chart">All Neighborhoods</h5>
+      <h4 class="tab" target="scatter-chart">Neighborhood In Depth</h5>
     </div>
 
 
     <div class="chart-section chart-border bubble-chart">
+      <div class="large progress"><div>Loading…</div></div>
       <div class="chart" id="neighborhood-stats"></div>
     </div>
 
     <div class="chart-section scatter-chart">
       <div class="col-sm-12 chart-border">
         <form class="form-inline">
-          <input class="neigh-input form-control" type="text" id="neigh-inc" list="neigh-inc-list" placeholder="e.g. Gaslamp">
+          <input class="neigh-input form-control" type="text" id="neigh-inc" list="neigh-inc-list" placeholder="neighborhood...">
           <datalist class="neigh-dropdown" id="neigh-inc-list"></datalist>
-          <select class="form-control" id="date-select"></select>
           <button class="neigh-select btn btn-default" target="neigh-inc" type="button" name="button">Go</button>
-          <h4 class="neigh-title">Talmadge</h4>
+          <h4 class="neigh-title" id="scatter-title">Talmadge</h4>
           <div class="chart" id="neigh-incidents-scatter"></div>
         </form>
       </div>

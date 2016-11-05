@@ -15,6 +15,10 @@ var listenForTabSelection = function() {
   })
 }
 
+var toggleSpinner = function() {
+  $(".progress").toggle();
+}
+
 var activateTab = function(selectedTab) {
   $(".tab").removeClass("active-tab");
   $(".chart-section").removeClass("active");
@@ -27,8 +31,10 @@ var renderActivatedChart = function(chartToActivate) {
   if(chartToActivate === "bubble-chart") {
     renderBubbleChart();
   } else if(chartToActivate === "scatter-chart") {
+    toggleSpinner();
     renderScatterChart("Talmadge", "01/01/15", "A");
   } else {
+    toggleSpinner();
     renderAreaChart("#disp-cat-1", "Gaslamp");
     renderAreaChart("#disp-cat-2", "La Jolla");
   }
@@ -60,75 +66,75 @@ var renderAreaChart = function(elementId, neighborhood) {
 var renderScatterChart = function(neighborhood, month, code) {
   var scatterData
   var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=";
+
   $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%A", function(arrestStats) {
       scatterData = arrestStats;
       $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%R", function(reportStats) {
+        renderDateDropDownList();
         scatterData = scatterData.concat(reportStats);
 
-      var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 550)
-      scatterData.forEach(function (d) {
-        d["Day"] = d["date"].substring(0, d["date"].length - 6);
-        d["Time of Day"] =
-            "2000-01-01 " + d["date"].substring(d["date"].length - 5);
-      }, this);
+        var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 550)
+        scatterData.forEach(function (d) {
+          d["Day"] = d["date"].substring(0, d["date"].length - 6);
+          d["Time of Day"] =
+              "2000-01-01 " + d["date"].substring(d["date"].length - 5);
+        }, this);
 
 
-      var scatterChart = new dimple.chart(scatterSvg, scatterData);
-      scatterChart.setBounds(60, 20, 650, 450)
-      var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
-      var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
-        "%Y-%m-%d %H:%M", "%H:%M");
+        var scatterChart = new dimple.chart(scatterSvg, scatterData);
+        scatterChart.setBounds(60, 20, 650, 450)
+        var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
+        var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
+          "%Y-%m-%d %H:%M", "%H:%M");
 
-      scatterChart.addSeries(["neighborhood", "address", "disposition description", "call type description"], dimple.plot.scatter);
-      var scatterLegend = scatterChart.addLegend(820, 120, 60, 300);
-      scatterChart.draw();
+        scatterChart.addSeries(["neighborhood", "address", "disposition description", "call type description"], dimple.plot.scatter);
+        var scatterLegend = scatterChart.addLegend(820, 120, 60, 300);
+        scatterChart.draw();
 
-      scatterSvg.selectAll(".dimple-axis-x")
-        .style("font-size", '14px')
-        .attr("y", 520)
-      scatterSvg.selectAll(".dimple-axis-y")
-        .style("font-size", '14px')
+        scatterSvg.selectAll(".dimple-axis-x")
+          .style("font-size", '14px')
+          .attr("y", 520)
+        scatterSvg.selectAll(".dimple-axis-y")
+          .style("font-size", '14px')
 
-      scatterChart.legends = [];
-          scatterSvg.selectAll("title_text")
-            .data(["Click legend to","show/hide by Call Type:"])
-            .enter()
-            .append("text")
-              .attr("x", 860)
-              .attr("y", function (d, i) { return 80 + i * 15; })
-              .style("font-family", "sans-serif")
-              .style("font-size", "10px")
-              .style("color", "Black")
-              .text(function (d) { return d; });
+        scatterChart.legends = [];
+            scatterSvg.selectAll("title_text")
+              .data(["Click legend to","show/hide by Call Type:"])
+              .enter()
+              .append("text")
+                .attr("x", 860)
+                .attr("y", function (d, i) { return 80 + i * 15; })
+                .style("font-family", "sans-serif")
+                .style("font-size", "10px")
+                .style("color", "Black")
+                .text(function (d) { return d; });
 
 
-      var scatterFilterValues = dimple.getUniqueValues(scatterData, "call type description");
-      scatterLegend.shapes.selectAll("rect")
-        .on("click", function (e) {
-          var scatterHide = false;
-          var newScatterFilters = [];
-          scatterFilterValues.forEach(function (f) {
-            if (f === e.aggField.slice(-1)[0]) {
-              scatterHide = true;
+        var scatterFilterValues = dimple.getUniqueValues(scatterData, "call type description");
+        scatterLegend.shapes.selectAll("rect")
+          .on("click", function (e) {
+            var scatterHide = false;
+            var newScatterFilters = [];
+            scatterFilterValues.forEach(function (f) {
+              if (f === e.aggField.slice(-1)[0]) {
+                scatterHide = true;
+              } else {
+                newScatterFilters.push(f);
+              }
+            });
+            if (scatterHide) {
+              d3.select(this).style("opacity", 0.2);
             } else {
-              newScatterFilters.push(f);
+              newScatterFilters.push(e.aggField.slice(-1)[0]);
+              d3.select(this).style("opacity", 0.8);
             }
-          });
-          if (scatterHide) {
-            d3.select(this).style("opacity", 0.2);
-          } else {
-            newScatterFilters.push(e.aggField.slice(-1)[0]);
-            d3.select(this).style("opacity", 0.8);
-          }
-          scatterFilterValues = newScatterFilters;
-          scatterChart.data = dimple.filterData(scatterData, "call type description", scatterFilterValues);
-          scatterChart.draw(900);
+            scatterFilterValues = newScatterFilters;
+            scatterChart.data = dimple.filterData(scatterData, "call type description", scatterFilterValues);
+            scatterChart.draw(900);
+        });
       });
-    });
   });
 };
-
-
 
 var prepareChartArea = function(chartElementId, neighborhood) {
   var element = $(chartElementId);
@@ -149,18 +155,22 @@ var renderNeighborhoodDropDownList = function() {
     listenForNeighborhoodRequest(names);
   })
 }
-//
-// var renderDataDropDownList = function() {
-//   $.get("/Users/GetUsers", null, function(data) {
-//     // $("#UsersList option").remove(); // Remove all <option> child tags.
-//     // $.each(data.Users, function(index, item) { // Iterates through a collection
-//     //     $("#UsersList").append( // Append an object to the inside of the select box
-//     //         $("<option></option>") // Yes you can do this.
-//     //             .text(item.Description)
-//     //             .val(item.Id)
-//     //     );
-//     // });
-// }
+
+var renderDateDropDownList = function() {
+  $.get("/api/v1/incidents_months", function(dates) {
+    var selectEl = "<span><select class='form-control' id='date-select'></select></span>"
+    $(selectEl).appendTo("#scatter-title")
+    $.each(dates, function(index, item) {
+        var value = item.split("/")[0] + "/01/" + item.split("/")[1]
+        $("#date-select").append(
+            $("<option></option>")
+                .text(item)
+                .val(value)
+        );
+    });
+    listenForDateRequest();
+  });
+}
 
 var listenForNeighborhoodRequest = function(allNeighNames) {
   $(".neigh-select").on("click", function(e){
@@ -172,6 +182,15 @@ var listenForNeighborhoodRequest = function(allNeighNames) {
     } else {
       renderSelectedChart(chartElementId, selectedNeigh)
     }
+  })
+}
+
+var listenForDateRequest = function() {
+  $("#date-select").on("change", function(e){
+    var month = $(this).val();
+    var neighborhood = $("#scatter-title").text().split("1")[0];
+    prepareChartArea("#neigh-incidents-scatter", neighborhood);
+    renderScatterChart(neighborhood, month, "A")
   })
 }
 
@@ -194,6 +213,7 @@ var renderSelectedChart = function(chartElementId, selectedNeighborhood) {
 
 var renderBubbleChart = function() {
   $.get('/api/v1/stats/overview_stats', function(stats) {
+    toggleSpinner();
     var bubbleStats = stats.length === 2 ? stats[0] : stats;
 
     var bubbleSvg = dimple.newSvg("#neighborhood-stats", 1050, 550);
