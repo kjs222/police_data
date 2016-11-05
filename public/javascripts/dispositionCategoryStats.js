@@ -2,20 +2,26 @@ var renderDispositionCategoryChart = function(elementId, neighborhood) {
   prepareChartArea(elementId, neighborhood);
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(data){
     var data = data.length === 2 ? data[0] : data;
-    var svg = dimple.newSvg(elementId, 400, 400);
+    var svg = dimple.newSvg(elementId, 450, 400);
     var myChart = new dimple.chart(svg, data);
-    myChart.setBounds(70, 30, 200, 330);
+    myChart.setBounds(70, 10, 300, 280);
     var x = myChart.addCategoryAxis("x", "month");
     x.addGroupOrderRule("month");
-    myChart.addPctAxis("y", "incidents");
+    var y = myChart.addPctAxis("y", "incidents");
+    y.title = "% of Incidents"
     var s = myChart.addSeries(["neighborhood", "type"], dimple.plot.area);
     s.lineWeight = 1;
     s.barGap = 0.05;
     if (elementId === "#disp-cat-2") {
-      myChart.addLegend(300, 20, 100, 300, "left");
+      myChart.addLegend(370, 20, 100, 300, "left");
     }
     myChart.draw();
+    svg.selectAll(".dimple-title")
+      .style("font-size", '14px')
+    svg.selectAll(".dimple-legend")
+      .style("font-size", '12px')
   });
+
 }
 
 var prepareChartArea = function(chartElementId, neighborhood) {

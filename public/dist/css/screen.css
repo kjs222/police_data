@@ -1415,6 +1415,7 @@
   padding: 9px 14px 19px 14px;
   height: 23px;
   min-width: 775px;
+  /*min-height: 45px;*/
 }
 .swagger-section #input_baseUrl {
   width: 400px;

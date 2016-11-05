@@ -3,7 +3,9 @@ var renderNeighborhoodStatsChart = function(stats) {
   var myChart = new dimple.chart(svg, stats);
   myChart.setBounds(50, 40, 750, 450)
   var x = myChart.addMeasureAxis("x", "num_incidents");
+  x.title = "Total Number of Incidents"
   var y = myChart.addMeasureAxis("y", "num_arrests");
+  y.title = "Total Number of Arrests"
   var z = myChart.addMeasureAxis("z", "num_transient_incidents");
 
   y.overrideMax = 1800;
@@ -25,6 +27,13 @@ var renderNeighborhoodStatsChart = function(stats) {
   s.lineMarkers = true;
   var myLegend = myChart.addLegend(900, 100, 60, 300, "Right");
   myChart.draw();
+  svg.selectAll(".dimple-title")
+    .style("font-size", '14px')
+  svg.selectAll(".dimple-legend")
+    .style("font-size", '12px')
+  svg.selectAll(".dimple-custom-axis-label")
+    .style("font-size", '12px')
+
 
   myChart.legends = [];
       svg.selectAll("title_text")
@@ -34,7 +43,7 @@ var renderNeighborhoodStatsChart = function(stats) {
           .attr("x", 850)
           .attr("y", function (d, i) { return 80 + i * 14; })
           .style("font-family", "sans-serif")
-          .style("font-size", "10px")
+          .style("font-size", "12px")
           .style("color", "Black")
           .text(function (d) { return d; });
 

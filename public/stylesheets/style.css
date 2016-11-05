@@ -1,13 +1,51 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: red;
+#header.home-header {
+  min-height: 50px;
+  background-color: black;
 }
 
-a {
-  color: #00B7FF;
+.home-title {
+  margin-top: 5px;
 }
 
-.neigh-input {
-  height: 100px;
+.tab {
+  display: inline-block;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: -5px;
+  color: black;
+  font-weight: bold;
+  font-family: "Droid Sans", sans-serif;
+  font-size: 14px;
+  border-left: 1px solid black;
+  border: 1.5px solid #d3d3d3;
+  border-radius: 4px 4px 0 0;
+  width: 150px;
+  text-align: center;
+}
+
+.tab:not(.active-tab):hover {
+  text-decoration: none;
+  color: white;
+  background: black;
+}
+
+.active-tab {
+  /*border-bottom: 4px solid #9C7A97;*/
+  background: #d3d3d3;
+}
+
+.neigh-title {
+  font-style: bold;
+  font-size: 20px;
+  font-family: "Droid Sans", sans-serif;
+  text-align: center;
+  padding: 20px;
+}
+
+.form-inline .neigh-input {
+  margin-left: 100px;
+}
+
+.chart {
+  padding: 30px;
 }
