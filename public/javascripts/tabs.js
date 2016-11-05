@@ -1,8 +1,9 @@
 $(document).ready(function() {
   listenForTabSelection();
   renderNeighborhoodDropDownList();
+  renderAreaChart("#disp-cat-1", "Gaslamp");
+  renderAreaChart("#disp-cat-2", "La Jolla");
 })
-
 
 var listenForTabSelection = function() {
   $(".tab").on("click", function(){
@@ -38,7 +39,7 @@ var renderAreaChart = function(elementId, neighborhood) {
     var areaData = areaData.length === 2 ? areaData[0] : areaData; //take out when raw query issue is handled
     var areaSvg = dimple.newSvg(elementId, 540, 550);
     var areaChart = new dimple.chart(areaSvg, areaData);
-    areaChart.setBounds(70, 10, 380, 450);
+    areaChart.setBounds(40, 10, 380, 450);
     var areaX = areaChart.addCategoryAxis("x", "month");
     areaX.addGroupOrderRule("month");
     areaChart.addPctAxis("y", "incidents");
@@ -55,8 +56,6 @@ var renderAreaChart = function(elementId, neighborhood) {
       .style("font-size", '10px')
   });
 }
-
-
 
 var renderScatterChart = function(neighborhood, month, code) {
   var scatterData
@@ -75,20 +74,20 @@ var renderScatterChart = function(neighborhood, month, code) {
 
 
       var scatterChart = new dimple.chart(scatterSvg, scatterData);
-      scatterChart.setBounds(100, 20, 650, 450)
+      scatterChart.setBounds(60, 20, 650, 450)
       var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
       var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
         "%Y-%m-%d %H:%M", "%H:%M");
 
       scatterChart.addSeries(["neighborhood", "address", "disposition description", "call type description"], dimple.plot.scatter);
-      var scatterLegend = scatterChart.addLegend(860, 120, 60, 300);
+      var scatterLegend = scatterChart.addLegend(820, 120, 60, 300);
       scatterChart.draw();
+
       scatterSvg.selectAll(".dimple-axis-x")
         .style("font-size", '14px')
         .attr("y", 520)
       scatterSvg.selectAll(".dimple-axis-y")
         .style("font-size", '14px')
-        .attr("y", 100)
 
       scatterChart.legends = [];
           scatterSvg.selectAll("title_text")
@@ -103,26 +102,26 @@ var renderScatterChart = function(neighborhood, month, code) {
               .text(function (d) { return d; });
 
 
-      var filterValues = dimple.getUniqueValues(scatterData, "call type description");
+      var scatterFilterValues = dimple.getUniqueValues(scatterData, "call type description");
       scatterLegend.shapes.selectAll("rect")
         .on("click", function (e) {
-          var hide = false;
-          var newFilters = [];
-          filterValues.forEach(function (f) {
+          var scatterHide = false;
+          var newScatterFilters = [];
+          scatterFilterValues.forEach(function (f) {
             if (f === e.aggField.slice(-1)[0]) {
-              hide = true;
+              scatterHide = true;
             } else {
-              newFilters.push(f);
+              newScatterFilters.push(f);
             }
           });
-          if (hide) {
+          if (scatterHide) {
             d3.select(this).style("opacity", 0.2);
           } else {
-            newFilters.push(e.aggField.slice(-1)[0]);
+            newScatterFilters.push(e.aggField.slice(-1)[0]);
             d3.select(this).style("opacity", 0.8);
           }
-          filterValues = newFilters;
-          scatterChart.scatterData = dimple.filterData(scatterData, "call type description", filterValues);
+          scatterFilterValues = newScatterFilters;
+          scatterChart.data = dimple.filterData(scatterData, "call type description", scatterFilterValues);
           scatterChart.draw(900);
       });
     });
@@ -231,7 +230,6 @@ var renderBubbleChart = function() {
       .attr("y", 550)
     bubbleSvg.selectAll(".dimple-axis-y")
       .style("font-size", '14px')
-      .attr("y", 260)
     bubbleSvg.selectAll(".dimple-legend")
       .style("font-size", '12px')
     bubbleSvg.selectAll(".dimple-custom-axis-label")

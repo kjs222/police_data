@@ -6,7 +6,9 @@
 .home-title {
   margin-top: 5px;
 }
-
+.tab-container {
+  margin-left: 5px;
+}
 .tab {
   display: inline-block;
   padding: 10px;
@@ -37,7 +39,11 @@
   font-size: 20px;
   font-family: "Droid Sans", sans-serif;
   text-align: center;
-  padding: 20px;
+  padding: 20px 20px 0px 20px;
+}
+
+.form-inline {
+  margin-top: 20px;
 }
 
 .form-inline .neigh-input {
@@ -45,22 +51,22 @@
 }
 
 .chart {
-  margin: 30px;
+  margin: 0px, 30px, 30px, 30px;
 }
 
 .chart-section:not(.active) {
   display:none;
 }
 
-
-/*.chart-section {
-  width: 1200px;
-  height: 700px;
+.chart-section {
+  width: 1100px;
+  height: 660px;
   border: .5px solid gray;
-}*/
-
+  border-radius: 4px;
+}
 
 .main {
-  margin-left: 50px;
-  margin-right: 50px;
+  width: 1150px;
+  margin-left: auto;
+  margin-right: auto;
 }
