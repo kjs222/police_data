@@ -85,7 +85,7 @@ var renderScatterChart = function(neighborhood, month, code) {
 
 
         var scatterChart = new dimple.chart(scatterSvg, scatterData);
-        scatterChart.setBounds(60, 20, 650, 450)
+        scatterChart.setBounds(70, 20, 650, 450)
         var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
         var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
           "%Y-%m-%d %H:%M", "%H:%M");
@@ -102,11 +102,11 @@ var renderScatterChart = function(neighborhood, month, code) {
 
         scatterChart.legends = [];
             scatterSvg.selectAll("title_text")
-              .data(["Click legend to","show/hide by Call Type:"])
+              .data(["Click legend to","show/hide:"])
               .enter()
               .append("text")
-                .attr("x", 860)
-                .attr("y", function (d, i) { return 80 + i * 15; })
+                .attr("x", 820)
+                .attr("y", function (d, i) { return 100 + i * 15; })
                 .style("font-family", "sans-serif")
                 .style("font-size", "10px")
                 .style("color", "Black")
@@ -267,7 +267,7 @@ var renderBubbleChart = function() {
           .enter()
           .append("text")
             .attr("x", 925)
-            .attr("y", function (d, i) { return 80 + i * 14; })
+            .attr("y", function (d, i) { return 150 + i * 14; })
             .style("font-family", "sans-serif")
             .style("font-size", "12px")
             .style("color", "Black")
