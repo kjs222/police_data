@@ -64,13 +64,16 @@ var renderAreaChart = function(elementId, neighborhood) {
 }
 
 var renderScatterChart = function(neighborhood, month, code) {
+  renderDateDropDownList(month);
   var scatterData
   var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=";
-
   $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%A", function(arrestStats) {
       scatterData = arrestStats;
+
       $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%R", function(reportStats) {
-        renderDateDropDownList();
+
+
+
         scatterData = scatterData.concat(reportStats);
 
         var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 550)
@@ -156,9 +159,10 @@ var renderNeighborhoodDropDownList = function() {
   })
 }
 
-var renderDateDropDownList = function() {
+var renderDateDropDownList = function(date) {
+  $("date-select-span").remove();
   $.get("/api/v1/incidents_months", function(dates) {
-    var selectEl = "<span><select class='form-control' id='date-select'></select></span>"
+    var selectEl = "<span id='date-select-span'><select class='form-control' id='date-select'></select></span>"
     $(selectEl).appendTo("#scatter-title")
     $.each(dates, function(index, item) {
         var value = item.split("/")[0] + "/01/" + item.split("/")[1]
@@ -168,6 +172,7 @@ var renderDateDropDownList = function() {
                 .val(value)
         );
     });
+    if(date) {$('.scatter-chart option[value="'+ date +'"]').prop('selected', true)}
     listenForDateRequest();
   });
 }
