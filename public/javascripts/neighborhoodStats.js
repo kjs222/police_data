@@ -46,7 +46,7 @@ var renderNeighborhoodStatsChart = function(bubbleStats) {
         .enter()
         .append("text")
           .attr("x", 925)
-          .attr("y", function (d, i) { return 110 + i * 14; })
+          .attr("y", function (d, i) { return 80 + i * 14; })
           .style("font-family", "sans-serif")
           .style("font-size", "12px")
           .style("color", "Black")
