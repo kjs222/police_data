@@ -8,10 +8,10 @@
       "email": "kerry.sheldon@gmail.com"
     }
   },
-  "host": "sandiego-police-data.herokuapp.com/",
+  "host": "sandiego-police-data.herokuapp.com",
   "basePath": "/api/v1/",
   "produces": ["application/json"],
-  "schemes": ["http"],
+  "schemes": ["https"],
     "paths": {
       "/incidents": {
         "get": {
