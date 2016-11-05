@@ -22,6 +22,7 @@ var allIncidents = function(req, res) {
 exports.getMonthYears = function(req, res) {
   models.Incident.getMonthYears()
   .then(function(results) {
+    if (results.length === 2) { results = results[0] }
     var monthYears = results.map(function(result){
       return result["month_years"];
     });
