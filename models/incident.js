@@ -66,6 +66,13 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
       },
+      getMonthYears: function() {
+        var datesMonths ="select date_part('month', date) as month, date_part('year', date) as year into temporary the_dates from incidents group by month, year order by year, month;"
+        var formatteddatesMonths = "select cast(month  as varchar) || '/' ||  cast(year as varchar) as month_years from the_dates;"
+        var dropTable = "DROP TABLE the_dates;"
+        return sequelize.query(datesMonths + formatteddatesMonths + dropTable, { type: sequelize.QueryTypes.SELECT})
+
+      },
       findByQuery: function(models, query, page) {
         var page = page || 1;
         var offset = 100 * (page - 1);

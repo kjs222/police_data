@@ -1,7 +1,6 @@
 var renderDispositionCategoryChart = function(elementId, neighborhood) {
-  prepareChartArea(elementId, neighborhood);
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(data){
-    var data = data.length === 2 ? data[0] : data;
+    var data = data.length === 2 ? data[0] : data; //take out when raw query issue is handled
     var svg = dimple.newSvg(elementId, 400, 400);
     var myChart = new dimple.chart(svg, data);
     myChart.setBounds(70, 30, 200, 330);
@@ -20,7 +19,6 @@ var renderDispositionCategoryChart = function(elementId, neighborhood) {
 
 var renderNeighborhoodIncidentsChart = function(data) {
   var svg = dimple.newSvg("#neigh-incidents-scatter", 950, 550)
-
   data.forEach(function (d) {
     d["Day"] = d["date"].substring(0, d["date"].length - 6);
     d["Time of Day"] =
@@ -108,6 +106,18 @@ var renderNeighborhoodDropDownList = function() {
   })
 }
 
+var renderDataDropDownList = function() {
+  $.get("/Users/GetUsers", null, function(data) {
+    // $("#UsersList option").remove(); // Remove all <option> child tags.
+    // $.each(data.Users, function(index, item) { // Iterates through a collection
+    //     $("#UsersList").append( // Append an object to the inside of the select box
+    //         $("<option></option>") // Yes you can do this.
+    //             .text(item.Description)
+    //             .val(item.Id)
+    //     );
+    // });
+}
+
 var listenForNeighborhoodRequest = function(allNeighNames) {
   $(".neigh-select").on("click", function(e){
     removeErrorMessages();
@@ -121,22 +131,21 @@ var listenForNeighborhoodRequest = function(allNeighNames) {
   })
 }
 
-var renderSelectedChart = function(chartElementId, selectedNeighborhood) {
-  if(chartElementId === "#neigh-incidents-scatter") {
-        //working but do a refactor for consistency
-    prepareChartArea(chartElementId, selectedNeighborhood);
-    chartNeighborhoodIncidents(selectedNeighborhood, "01/01/15", "A");
-  } else {
-    renderDispositionCategoryChart(chartElementId, selectedNeighborhood);
-  }
-}
-
 var renderErrorMessage = function(element) {
   element.after("<p class='error'>Please select a valid neighbohrood</p>");
 }
 
 var removeErrorMessages = function(element) {
   $(".error").remove();
+}
+
+var renderSelectedChart = function(chartElementId, selectedNeighborhood) {
+  prepareChartArea(chartElementId, selectedNeighborhood);
+  if(chartElementId === "#neigh-incidents-scatter") {
+    chartNeighborhoodIncidents(selectedNeighborhood, "01/01/15", "A");
+  } else {
+    renderDispositionCategoryChart(chartElementId, selectedNeighborhood);
+  }
 }
 
 $(document).ready(function() {

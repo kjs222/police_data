@@ -32,6 +32,9 @@ router.route('/api/v1/neighborhood_names')
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
 
+router.route('/api/v1/incidents_months')
+  .get(incidentsController.getMonthYears);
+
 router.route('/api/v1/stats/overview_stats')
   .get(statsController.getOverviewStats);
 

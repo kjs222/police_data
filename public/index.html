@@ -12,13 +12,16 @@
     <script src="javascripts/dimple.min.js"></script>
   </head>
   <body>
-    <div class="chart" id="neighborhood-stats"></div>
 
+    <div class="chart" id="neighborhood-stats"></div>
 
     <div class="col-sm-12">
       <form class="form-inline">
         <input class="neigh-input form-control" type="text" id="neigh-inc" list="neigh-inc-list" placeholder="e.g. Gaslamp">
         <datalist class="neigh-dropdown" id="neigh-inc-list"></datalist>
+
+        <select class="form-control" id="date-select"></select>
+
         <button class="neigh-select btn btn-default" target="neigh-inc" type="button" name="button">Go</button>
         <h4 class="neigh-title">Talmadge</h4>
         <div class="chart" id="neigh-incidents-scatter"></div>
