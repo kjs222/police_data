@@ -10,8 +10,7 @@
 .tab {
   display: inline-block;
   padding: 10px;
-  margin-top: 10px;
-  margin-left: -5px;
+  margin: 10px 0px 0px -5px;
   color: black;
   font-weight: bold;
   font-family: "Droid Sans", sans-serif;
@@ -30,7 +29,6 @@
 }
 
 .active-tab {
-  /*border-bottom: 4px solid #9C7A97;*/
   background: #d3d3d3;
 }
 
@@ -47,5 +45,22 @@
 }
 
 .chart {
-  padding: 30px;
+  margin: 30px;
+}
+
+.chart-section:not(.active) {
+  display:none;
+}
+
+
+.chart-section {
+  width: 1200px;
+  height: 700px;
+  border: .5px solid gray;
+}
+
+
+.main {
+  margin-left: 50px;
+  margin-right: 50px;
 }

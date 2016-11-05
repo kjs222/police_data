@@ -1,5 +1,6 @@
 'use strict';
 var models  = require('../models');
+var dateFormat = require('dateformat');
 
 module.exports = function(sequelize, DataTypes) {
   var Incident = sequelize.define('Incident', {
@@ -26,14 +27,18 @@ module.exports = function(sequelize, DataTypes) {
         }
         return formatted;
       },
+      formatDate: function() {
+        return dateFormat(this.date, "dd mmm yyyy HH:MM");
+      },
       serialize: function() {
         return {"incident number": this.number,
-                "date": this.date,
+                "date": this.formatDate(),
                 "address": this.formatAddress(),
                 "priority": this.priority,
                 "beat": this.Beat.number,
                 "neighborhood": this.Beat.neighborhood,
                 "disposition code": this.Disposition.code,
+                "disposition type": this.Disposition.code[0],
                 "disposition description": this.Disposition.description,
                 "call type code": this.CallType.code,
                 "call type description": this.CallType.description
@@ -61,9 +66,17 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
       },
+      getMonthYears: function() {
+        var datesMonths ="select date_part('month', date) as month, date_part('year', date) as year into temporary the_dates from incidents group by month, year order by year, month;"
+        var formatteddatesMonths = "select cast(month  as varchar) || '/' ||  cast(year as varchar) as month_years from the_dates;"
+        var dropTable = "DROP TABLE the_dates;"
+        return sequelize.query(datesMonths + formatteddatesMonths + dropTable, { type: sequelize.QueryTypes.SELECT})
+
+      },
       findByQuery: function(models, query, page) {
         var page = page || 1;
         var offset = 100 * (page - 1);
+        console.log(query);
         return Incident.findAndCountAll({
                         where: query,
                         offset: offset,
@@ -71,6 +84,20 @@ module.exports = function(sequelize, DataTypes) {
                         order: '"date" ASC',
                         include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
         });
+      },
+      findByNeighAndMonth: function(models, query) {
+        var neighborhood = query["neighborhood"];
+        var code = query["code"];
+        var start = new Date(query["month"]);
+        var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
+        return Incident.findAll({
+                        where: {'Beat.neighborhood': neighborhood,
+                                'date': {gte: start, lt: end},
+                                'Disposition.code': {like: "%" + code },
+                        },
+                        order: '"date" ASC',
+                        include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
+                      });
       }
     },
     underscored: true,

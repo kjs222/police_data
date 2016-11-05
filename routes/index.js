@@ -32,11 +32,17 @@ router.route('/api/v1/neighborhood_names')
 router.route('/api/v1/incidents')
   .get(incidentsController.getIncidents);
 
+router.route('/api/v1/incidents_months')
+  .get(incidentsController.getMonthYears);
+
 router.route('/api/v1/stats/overview_stats')
   .get(statsController.getOverviewStats);
 
 router.route('/api/v1/stats/disposition_category_stats')
   .get(statsController.getDispCategoryStats);
+
+router.route('/api/v1/stats/neigh_incident_stats')
+  .get(statsController.getNeighIncidentStats);
 
 module.exports = router;
 

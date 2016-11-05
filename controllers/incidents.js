@@ -18,3 +18,11 @@ var allIncidents = function(req, res) {
     return res.json(results);
   });
 };
+
+
+exports.getMonthYears = function(req, res) {
+  models.Incident.getMonthYears()
+  .then(function(results) {
+    return res.json(results);
+  });
+};

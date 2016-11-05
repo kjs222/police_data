@@ -16,6 +16,7 @@
     <script src="javascripts/d3.min.js"></script>
     <script src="javascripts/dimple.min.js"></script>
   </head>
+
   <body class="swagger-section">
 
     <div id='header' class="home-header">
@@ -27,38 +28,59 @@
       </div>
     </div>
 
+    <div class="main">
+
 
     <div class="tab-container">
-      <h4 class='tab active-tab' id="current-tab" target="current">Current Week</h5>
-      <h4 class="tab" id="next-tab" target="next">Next Week</h5>
-      <h4 class="tab" id="next-tab" target="next">another Week</h5>
-
+      <h4 class="tab active-tab" target="area-chart">another Week</h5>
+      <h4 class='tab' target="bubble-chart">Current Week</h5>
+      <h4 class="tab" target="scatter-chart">Next Week</h5>
     </div>
 
-    <div class="chart" id="neighborhood-stats"></div>
 
-    <div class="col-md-5">
-      <form class="form-inline">
-        <input class="neigh-input form-control" type="text" id="neigh-1" list="neigh-1-list" placeholder="neighborhood...">
-        <datalist class="neigh-dropdown" id="neigh-1-list"></datalist>
-        <button class="neigh-select btn btn-default" target="neigh-1" type="button" name="button">Go</button>
-        <h4 class="neigh-title">Gaslamp</h4>
-        <div class="chart" id="disp-cat-1"></div>
-      </form>
+    <div class="chart-section chart-border bubble-chart">
+      <div class="chart" id="neighborhood-stats"></div>
     </div>
 
-    <div class="col-md-6">
-      <form class="form-inline">
-        <input class="neigh-input form-control" type="text" id="neigh-2" list="neigh-2-list" placeholder="neighborhood...">
-        <datalist class="neigh-dropdown" id="neigh-2-list"></datalist>
-        <button class="neigh-select btn btn-default" target="neigh-2" type="button" name="button">Go</button>
-        <h4 class="neigh-title">La Jolla</h4>
-        <div class="chart" id="disp-cat-2"></div>
-      </form>
+    <div class="chart-section scatter-chart">
+      <div class="col-sm-12 chart-border">
+        <form class="form-inline">
+          <input class="neigh-input form-control" type="text" id="neigh-inc" list="neigh-inc-list" placeholder="e.g. Gaslamp">
+          <datalist class="neigh-dropdown" id="neigh-inc-list"></datalist>
+          <select class="form-control" id="date-select"></select>
+          <button class="neigh-select btn btn-default" target="neigh-inc" type="button" name="button">Go</button>
+          <h4 class="neigh-title">Talmadge</h4>
+          <div class="chart" id="neigh-incidents-scatter"></div>
+        </form>
+      </div>
     </div>
 
+    <div class="chart-section area-chart active">
+      <div class="chart-border">
+          <form class="form-inline col-sm-5">
+            <input class="neigh-input form-control" type="text" id="neigh-1" list="neigh-1-list" placeholder="neighborhood...">
+            <datalist class="neigh-dropdown" id="neigh-1-list"></datalist>
+            <button class="neigh-select btn btn-default" target="neigh-1" type="button" name="button">Go</button>
+            <h4 class="neigh-title">Gaslamp</h4>
+            <div class="chart" id="disp-cat-1"></div>
+          </form>
+
+          <form class="form-inline col-md-6">
+            <input class="neigh-input form-control" type="text" id="neigh-2" list="neigh-2-list" placeholder="neighborhood...">
+            <datalist class="neigh-dropdown" id="neigh-2-list"></datalist>
+            <button class="neigh-select btn btn-default" target="neigh-2" type="button" name="button">Go</button>
+            <h4 class="neigh-title">La Jolla</h4>
+            <div class="chart" id="disp-cat-2"></div>
+          </form>
+      </div>
+    </div>
+
+
+    </div>
+    <script src='javascripts/tabs.js' type='text/javascript'></script>
     <script src='javascripts/neighborhoodStats.js' type='text/javascript'></script>
-    <script src='javascripts/dispositionCategoryStats.js' type='text/javascript'></script>
+    <script src='javascripts/individualNeighCharts.js' type='text/javascript'></script>
+    <script src='javascripts/neighborhoodIncidents.js' type='text/javascript'></script>
 
   </body>
 </html>

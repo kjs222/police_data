@@ -1,20 +1,20 @@
-var renderNeighborhoodStatsChart = function(stats) {
-  var svg = dimple.newSvg("#neighborhood-stats", 950, 550);
-  var myChart = new dimple.chart(svg, stats);
-  myChart.setBounds(50, 40, 750, 450)
-  var x = myChart.addMeasureAxis("x", "num_incidents");
-  x.title = "Total Number of Incidents"
-  var y = myChart.addMeasureAxis("y", "num_arrests");
-  y.title = "Total Number of Arrests"
-  var z = myChart.addMeasureAxis("z", "num_transient_incidents");
+var renderNeighborhoodStatsChart = function(bubbleStats) {
+  var bubbleSvg = dimple.newSvg("#neighborhood-stats", 1050, 550);
+  var bubbleChart = new dimple.chart(bubbleSvg, bubbleStats);
+  bubbleChart.setBounds(60, 60, 850, 450)
+  var bubbleX = bubbleChart.addMeasureAxis("x", "num_incidents");
+  bubbleX.title = "Total Number of Incidents"
+  var bubbleY = bubbleChart.addMeasureAxis("y", "num_arrests");
+  bubbleY.title = "Total Number of Arrests"
+  var z = bubbleChart.addMeasureAxis("z", "num_transient_incidents");
 
-  y.overrideMax = 1800;
-  x.overrideMax = 25000;
+  bubbleY.overrideMax = 1800;
+  bubbleX.overrideMax = 25000;
 
 
-  var s = myChart.addSeries(["neighborhood"], dimple.plot.bubble);
+  var bubbleSeries = bubbleChart.addSeries(["neighborhood"], dimple.plot.bubble);
 
-  s.getTooltipText = function (e) {
+  bubbleSeries.getTooltipText = function (e) {
       return [
           "Neighborhood: " + e.aggField[0],
           "Incidents: " + e.cx.toFixed(0),
@@ -23,52 +23,57 @@ var renderNeighborhoodStatsChart = function(stats) {
       ];
   };
 
-  s.lineWeight = 4;
-  s.lineMarkers = true;
-  var myLegend = myChart.addLegend(900, 100, 60, 300, "Right");
-  myChart.draw();
-  svg.selectAll(".dimple-title")
+  bubbleSeries.lineWeight = 4;
+  bubbleSeries.lineMarkers = true;
+  var bubbleLegend = bubbleChart.addLegend(1000, 190, 60, 300, "Right");
+  bubbleChart.draw();
+
+  bubbleSvg.selectAll(".dimple-axis-x")
     .style("font-size", '14px')
-  svg.selectAll(".dimple-legend")
+    .attr("y", 550)
+  bubbleSvg.selectAll(".dimple-axis-y")
+    .style("font-size", '14px')
+    .attr("y", 260)
+  bubbleSvg.selectAll(".dimple-legend")
     .style("font-size", '12px')
-  svg.selectAll(".dimple-custom-axis-label")
+  bubbleSvg.selectAll(".dimple-custom-axis-label")
     .style("font-size", '12px')
 
 
-  myChart.legends = [];
-      svg.selectAll("title_text")
-        .data(["Click legend to","show/hide by Neighborhood:"])
+  bubbleChart.legends = [];
+      bubbleSvg.selectAll("title_text")
+        .data(["Click legend to","show/hide:"])
         .enter()
         .append("text")
-          .attr("x", 850)
-          .attr("y", function (d, i) { return 80 + i * 14; })
+          .attr("x", 925)
+          .attr("y", function (d, i) { return 110 + i * 14; })
           .style("font-family", "sans-serif")
           .style("font-size", "12px")
           .style("color", "Black")
           .text(function (d) { return d; });
 
 
-  var filterValues = dimple.getUniqueValues(stats, "neighborhood");
-  myLegend.shapes.selectAll("rect")
+  var bubbleFilterValues = dimple.getUniqueValues(bubbleStats, "neighborhood");
+  bubbleLegend.shapes.selectAll("rect")
     .on("click", function (e) {
-      var hide = false;
-      var newFilters = [];
-      filterValues.forEach(function (f) {
+      var bubbleHide = false;
+      var newBubbleFilters = [];
+      bubbleFilterValues.forEach(function (f) {
         if (f === e.aggField.slice(-1)[0]) {
-          hide = true;
+          bubbleHide = true;
         } else {
-          newFilters.push(f);
+          newBubbleFilters.push(f);
         }
       });
-      if (hide) {
+      if (bubbleHide) {
         d3.select(this).style("opacity", 0.2);
       } else {
-        newFilters.push(e.aggField.slice(-1)[0]);
+        newBubbleFilters.push(e.aggField.slice(-1)[0]);
         d3.select(this).style("opacity", 0.8);
       }
-      filterValues = newFilters;
-      myChart.data = dimple.filterData(stats, "neighborhood", filterValues);
-      myChart.draw(900);
+      bubbleFilterValues = newBubbleFilters;
+      bubbleChart.data = dimple.filterData(bubbleStats, "neighborhood", bubbleFilterValues);
+      bubbleChart.draw(900);
     });
 
 }
