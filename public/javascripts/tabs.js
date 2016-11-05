@@ -32,7 +32,7 @@ var renderActivatedChart = function(chartToActivate) {
     renderBubbleChart();
   } else if(chartToActivate === "scatter-chart") {
     toggleSpinner();
-    renderScatterChart("Talmadge", "01/01/15", "A");
+    renderScatterChart("Talmadge", "01/01/15");
   } else {
     toggleSpinner();
     renderAreaChart("#disp-cat-1", "Gaslamp");
@@ -63,7 +63,7 @@ var renderAreaChart = function(elementId, neighborhood) {
   });
 }
 
-var renderScatterChart = function(neighborhood, month, code) {
+var renderScatterChart = function(neighborhood, month) {
   renderDateDropDownList(month);
   var scatterData
   var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=";
@@ -98,44 +98,57 @@ var renderScatterChart = function(neighborhood, month, code) {
         scatterSvg.selectAll(".dimple-axis-y")
           .style("font-size", '14px')
 
-        scatterChart.legends = [];
-            scatterSvg.selectAll("title_text")
-              .data(["Click legend to","show/hide:"])
-              .enter()
-              .append("text")
-                .attr("x", 820)
-                .attr("y", function (d, i) { return 100 + i * 15; })
-                .style("font-family", "sans-serif")
-                .style("font-size", "10px")
-                .style("color", "Black")
-                .text(function (d) { return d; });
+        var scatterFilterOptions = {chart       :scatterChart,
+                                   svg          :scatterSvg,
+                                   legend       :scatterLegend,
+                                   data         :scatterData,
+                                   x            :820,
+                                   y            :100,
+                                   filterField  : "call type description"}
 
-
-        var scatterFilterValues = dimple.getUniqueValues(scatterData, "call type description");
-        scatterLegend.shapes.selectAll("rect")
-          .on("click", function (e) {
-            var scatterHide = false;
-            var newScatterFilters = [];
-            scatterFilterValues.forEach(function (f) {
-              if (f === e.aggField.slice(-1)[0]) {
-                scatterHide = true;
-              } else {
-                newScatterFilters.push(f);
-              }
-            });
-            if (scatterHide) {
-              d3.select(this).style("opacity", 0.2);
-            } else {
-              newScatterFilters.push(e.aggField.slice(-1)[0]);
-              d3.select(this).style("opacity", 0.8);
-            }
-            scatterFilterValues = newScatterFilters;
-            scatterChart.data = dimple.filterData(scatterData, "call type description", scatterFilterValues);
-            scatterChart.draw(900);
-        });
+        legendFilter(scatterFilterOptions)
       });
   });
 };
+
+var legendFilter = function(options) {
+  options.chart.legends = [];
+      options.svg.selectAll("title_text")
+        .data(["Click legend to","show/hide:"])
+        .enter()
+        .append("text")
+          .attr("x", options.x)
+          .attr("y", function (d, i) { return options.y + i * 15; })
+          .style("font-family", "sans-serif")
+          .style("font-size", "10px")
+          .style("color", "Black")
+          .text(function (d) { return d; });
+
+
+  var filterValues = dimple.getUniqueValues(options.data, options.filterField);
+  options.legend.shapes.selectAll("rect")
+    .on("click", function (e) {
+      var hide = false;
+      var newfilters = [];
+      filterValues.forEach(function (f) {
+        if (f === e.aggField.slice(-1)[0]) {
+          hide = true;
+        } else {
+          newfilters.push(f);
+        }
+      });
+      if (hide) {
+        d3.select(this).style("opacity", 0.2);
+      } else {
+        newfilters.push(e.aggField.slice(-1)[0]);
+        d3.select(this).style("opacity", 0.8);
+      }
+      filterValues = newfilters;
+      options.chart.data = dimple.filterData(options.data, options.filterField, filterValues);
+      options.chart.draw(900);
+  });
+
+}
 
 var prepareChartArea = function(chartElementId, neighborhood) {
   var element = $(chartElementId);
@@ -164,11 +177,7 @@ var renderDateDropDownList = function(date) {
     $(selectEl).appendTo("#scatter-title")
     $.each(dates, function(index, item) {
         var value = item.split("/")[0] + "/01/" + item.split("/")[1]
-        $("#date-select").append(
-            $("<option></option>")
-                .text(item)
-                .val(value)
-        );
+        $("#date-select").append($("<option></option>").text(item).val(value));
     });
     if(date) {$('.scatter-chart option[value="'+ date +'"]').prop('selected', true)}
     listenForDateRequest();
@@ -193,7 +202,7 @@ var listenForDateRequest = function() {
     var month = $(this).val();
     var neighborhood = $("#scatter-title").text().split("1")[0];
     prepareChartArea("#neigh-incidents-scatter", neighborhood);
-    renderScatterChart(neighborhood, month, "A")
+    renderScatterChart(neighborhood, month)
   })
 }
 
@@ -258,41 +267,14 @@ var renderBubbleChart = function() {
     bubbleSvg.selectAll(".dimple-custom-axis-label")
       .style("font-size", '12px')
 
+    var bubbleFilterOptions = {chart        :bubbleChart,
+                               svg          :bubbleSvg,
+                               legend       :bubbleLegend,
+                               data         :bubbleStats,
+                               x            :925,
+                               y            :150,
+                               filterField  : "neighborhood"}
 
-    bubbleChart.legends = [];
-        bubbleSvg.selectAll("title_text")
-          .data(["Click legend to","show/hide:"])
-          .enter()
-          .append("text")
-            .attr("x", 925)
-            .attr("y", function (d, i) { return 150 + i * 14; })
-            .style("font-family", "sans-serif")
-            .style("font-size", "12px")
-            .style("color", "Black")
-            .text(function (d) { return d; });
-
-
-    var bubbleFilterValues = dimple.getUniqueValues(bubbleStats, "neighborhood");
-    bubbleLegend.shapes.selectAll("rect")
-      .on("click", function (e) {
-        var bubbleHide = false;
-        var newBubbleFilters = [];
-        bubbleFilterValues.forEach(function (f) {
-          if (f === e.aggField.slice(-1)[0]) {
-            bubbleHide = true;
-          } else {
-            newBubbleFilters.push(f);
-          }
-        });
-        if (bubbleHide) {
-          d3.select(this).style("opacity", 0.2);
-        } else {
-          newBubbleFilters.push(e.aggField.slice(-1)[0]);
-          d3.select(this).style("opacity", 0.8);
-        }
-        bubbleFilterValues = newBubbleFilters;
-        bubbleChart.data = dimple.filterData(bubbleStats, "neighborhood", bubbleFilterValues);
-        bubbleChart.draw(900);
-      });
+    legendFilter(bubbleFilterOptions)
   });
 }
