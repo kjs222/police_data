@@ -72,8 +72,6 @@ var renderScatterChart = function(neighborhood, month, code) {
 
       $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%R", function(reportStats) {
 
-
-
         scatterData = scatterData.concat(reportStats);
 
         var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 550)

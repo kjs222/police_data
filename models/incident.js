@@ -91,15 +91,18 @@ module.exports = function(sequelize, DataTypes) {
         var start = new Date(query["month"]);
         var end = new Date(start.getFullYear(), start.getMonth()+1, 1)
         return Incident.findAll({
-                        where: {'Beat.neighborhood': neighborhood,
-                                'date': {gte: start, lt: end},
-                                'Disposition.code': {like: "%" + code },
-                        },
+                        where: { 'date': {gte: start, lt: end}},
                         order: '"date" ASC',
-                        include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
+                        include: [ {model: models.Beat,
+                            where: {'neighborhood': neighborhood}},
+                          {model: models.Disposition,
+                            where: {'code': {like: "%" + code }}},
+                          {model: models.CallType}]
                       });
       }
     },
+
+
     underscored: true,
     timestamps: false,
     tableName: 'incidents'
