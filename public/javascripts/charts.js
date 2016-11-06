@@ -15,10 +15,6 @@ var listenForTabSelection = function() {
   })
 }
 
-var toggleSpinner = function() {
-  $(".progress").toggle();
-}
-
 var activateTab = function(selectedTab) {
   $(".tab").removeClass("active-tab");
   $(".chart-section").removeClass("active");
@@ -29,12 +25,11 @@ var activateTab = function(selectedTab) {
 
 var renderActivatedChart = function(chartToActivate) {
   if(chartToActivate === "bubble-chart") {
+    $(".progress").show();
     renderBubbleChart();
   } else if(chartToActivate === "scatter-chart") {
-    toggleSpinner();
     renderScatterChart("Talmadge", "01/01/15");
   } else {
-    toggleSpinner();
     renderAreaChart("#disp-cat-1", "Gaslamp");
     renderAreaChart("#disp-cat-2", "La Jolla");
   }
@@ -43,9 +38,9 @@ var renderActivatedChart = function(chartToActivate) {
 var renderAreaChart = function(elementId, neighborhood) {
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(areaData){
     var areaData = areaData.length === 2 ? areaData[0] : areaData; //take out when raw query issue is handled
-    var areaSvg = dimple.newSvg(elementId, 540, 550);
+    var areaSvg = dimple.newSvg(elementId, 540, 520);
     var areaChart = new dimple.chart(areaSvg, areaData);
-    areaChart.setBounds(40, 10, 380, 450);
+    areaChart.setBounds(40, 10, 380, 420);
     var areaX = areaChart.addCategoryAxis("x", "month");
     areaX.addGroupOrderRule("month");
     areaChart.addPctAxis("y", "incidents");
@@ -74,7 +69,7 @@ var renderScatterChart = function(neighborhood, month) {
 
         scatterData = scatterData.concat(reportStats);
 
-        var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 550)
+        var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 500)
         scatterData.forEach(function (d) {
           d["Day"] = d["date"].substring(0, d["date"].length - 6);
           d["Time of Day"] =
@@ -83,7 +78,7 @@ var renderScatterChart = function(neighborhood, month) {
 
 
         var scatterChart = new dimple.chart(scatterSvg, scatterData);
-        scatterChart.setBounds(70, 20, 650, 450)
+        scatterChart.setBounds(70, 20, 650, 400)
         var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
         var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
           "%Y-%m-%d %H:%M", "%H:%M");
@@ -94,7 +89,7 @@ var renderScatterChart = function(neighborhood, month) {
 
         scatterSvg.selectAll(".dimple-axis-x")
           .style("font-size", '14px')
-          .attr("y", 520)
+          .attr("y", 480)
         scatterSvg.selectAll(".dimple-axis-y")
           .style("font-size", '14px')
 
@@ -225,9 +220,8 @@ var renderSelectedChart = function(chartElementId, selectedNeighborhood) {
 
 var renderBubbleChart = function() {
   $.get('/api/v1/stats/overview_stats', function(stats) {
-    toggleSpinner();
+    $(".progress").hide();
     var bubbleStats = stats.length === 2 ? stats[0] : stats;
-
     var bubbleSvg = dimple.newSvg("#neighborhood-stats", 1050, 550);
     var bubbleChart = new dimple.chart(bubbleSvg, bubbleStats);
     bubbleChart.setBounds(60, 60, 850, 450)
