@@ -9,6 +9,7 @@
 .tab-container {
   margin-left: 5px;
 }
+
 .tab {
   display: inline-block;
   padding: 10px;
@@ -47,7 +48,7 @@
 }
 
 .form-inline .neigh-input {
-  margin-left: 100px;
+  margin-left: 60px;
 }
 
 .chart {
@@ -63,6 +64,7 @@
   height: 660px;
   border: .5px solid gray;
   border-radius: 4px;
+  text-align: center;
 }
 
 .main {
@@ -97,7 +99,7 @@
 }
 
 .large.progress {
-  margin: 260px 0px 0 520px;
+  margin-top: 200px;
 	font-size: 24px;
 }
 
