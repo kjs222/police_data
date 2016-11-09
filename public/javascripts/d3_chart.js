@@ -5,6 +5,81 @@ $.get('/api/v1/stats/neigh_incident_stats' + queryString, function(data) {
     height = 400,
     padding = 100;
 
+  data.forEach(function (d) {
+    d["Day"] = d["date"].substring(0, d["date"].length - 6);
+    d["Time of Day"] =
+        "2000-01-01 " + d["date"].substring(d["date"].length - 5);
+  }, this);
+
+  var dayFormat = d3.time.format('%d %b %Y')
+  var timeFormat = d3.time.format('%Y-%m-%d %H:%M')
+
+  var xValue = function(d) { return dayFormat.parse(d["Day"]);}
+  var yValue = function(d) { return timeFormat.parse(d["Time of Day"]);}
+  //above isnt really doing what i want
+
+  var vis = d3.select(".d3-chart-time-scatter")
+              .append("svg")
+              .attr("width", width)
+              .attr("height", height);
+
+  var xScale = d3.time.scale()
+      .domain([d3.min(data, xValue), d3.max(data, xValue)])
+      .range([padding, width-padding*2]);
+
+  var yScale = d3.scale.ordinal()
+      .domain([d3.min(data, yValue), d3.max(data, yValue)])
+      .range([height-padding*2, padding]
+  var xMap = function(d) { return xScale(xValue(d));};
+  var yMap = function(d) { return xScale(yValue(d));};
+
+
+  var yAxis = d3.svg.axis()
+        .orient("left")
+        .scale(yScale);
+
+  var xAxis = d3.svg.axis()
+        .orient("bottom")
+        .scale(xScale);
+
+  vis.append("g")
+    .attr("class", "yaxis")
+    .attr("transform", "translate("+padding+",0)")
+    .call(yAxis);
+
+      // draw x axis with labels and move to the bottom of the chart area
+  vis.append("g")
+      .attr("class", "xaxis")
+      .attr("transform", "translate(0," + (height - padding) + ")")
+      .call(xAxis);
+
+  vis.selectAll(".dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("class", "dot")
+      .attr('cx', xMap)
+      .attr('cy', yMap)
+      .attr('r', 5)
+      .attr('fill', 'blue')
+
+});
+
+
+
+
+
+
+
+
+
+var queryString = "?neighborhood=Talmadge&month=01/01/15&code=%A";
+$.get('/api/v1/stats/neigh_incident_stats' + queryString, function(data) {
+
+  var width = 1000,
+    height = 400,
+    padding = 100;
+
   var timeFormat = d3.time.format('%d %b %Y %H:%M')
 
   var xValue = function(d) { return timeFormat.parse(d.date);}
