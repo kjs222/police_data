@@ -19,10 +19,11 @@ function StatsSerializer() {
 }
 
 StatsSerializer.prototype.serializeDispositionStats = function(results) {
-    results.forEach(function(result) {
+    results.map(function(result) {
       result["type"] = this.abrevToType[result["type"]];
       result["month"]= this.intToMonth[result["month"]];
     }, this);
+    return results;
 }
 
 module.exports = StatsSerializer;

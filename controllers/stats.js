@@ -11,7 +11,7 @@ exports.getOverviewStats = function(req, res) {
 exports.getDispCategoryStats = function(req, res) {
   var neighborhood = req.query["neighborhood"] || "Gaslamp";
   models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
-     statsSerializer.serializeDispositionStats(stats);
+     var stats = statsSerializer.serializeDispositionStats(stats);
      return res.json(stats)
   });
 };
