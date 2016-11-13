@@ -160,8 +160,8 @@ describe('Incident Search API', () => {
         var parsed = JSON.parse(response.body).incidents;
         var firstParsedIncident = parsed[0];
         var lastParsedIncident = parsed[parsed.length - 1];
-        assert.notEqual(firstParsedIncident["date"].indexOf(date), -1);
-        assert.notEqual(lastParsedIncident["date"].indexOf(date), -1);
+        assert.notEqual(firstParsedIncident["date"].indexOf("17 Apr 2015"), -1);
+        assert.notEqual(lastParsedIncident["date"].indexOf("17 Apr 2015"), -1);
         done();
       });
     });
@@ -191,9 +191,11 @@ describe('Incident Search API', () => {
         var parsed = JSON.parse(response.body).incidents
         var firstParsedIncident = parsed[0];
         var lastParsedIncident = parsed[parsed.length - 1];
-        assert.notEqual(firstParsedIncident["date"].indexOf(date), -1);
+        console.log(firstParsedIncident)
+        console.log(lastParsedIncident)
+        assert.notEqual(firstParsedIncident["date"].indexOf("18 Apr 2015"), -1);
         assert.equal(firstParsedIncident["call type code"], callCode);
-        assert.notEqual(lastParsedIncident["date"].indexOf(date), -1);
+        assert.notEqual(lastParsedIncident["date"].indexOf("16 Apr 2015"), -1);
         assert.equal(lastParsedIncident["call type code"], callCode);
         done();
       });

@@ -60,7 +60,7 @@ describe('Incident API', () => {
         var parsedJson = JSON.parse(response.body);
         var keys = Object.keys(parsedJson.incidents[0]);
         assert.isObject(parsedJson);
-        assert.equal(keys.length, 10);
+        assert.equal(keys.length, 11);
         assert.equal(keys.indexOf("incident number"), 0);
         assert.equal(keys.indexOf("date"), 1);
         assert.equal(keys.indexOf("address"), 2);
@@ -68,9 +68,10 @@ describe('Incident API', () => {
         assert.equal(keys.indexOf("beat"), 4);
         assert.equal(keys.indexOf("neighborhood"), 5);
         assert.equal(keys.indexOf("disposition code"), 6);
-        assert.equal(keys.indexOf("disposition description"), 7);
-        assert.equal(keys.indexOf("call type code"), 8);
-        assert.equal(keys.indexOf("call type description"), 9);
+        assert.equal(keys.indexOf("disposition type"), 7);
+        assert.equal(keys.indexOf("disposition description"), 8);
+        assert.equal(keys.indexOf("call type code"), 9);
+        assert.equal(keys.indexOf("call type description"), 10);
         done();
       });
     });
