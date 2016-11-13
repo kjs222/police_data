@@ -14,6 +14,8 @@ This project represents my final project at Turing.  The project spec required t
 * Dimple JS for charting
 * Swagger for API documentation
 
+Note: D3-only is a branch with some WIP D3-only charts (i.e. no Dimple).  I plan to keep working on these and see if I can recreate all of the charts only using D3.
+
 
 ### Production
 [Production Site](https://sandiego-police-data.herokuapp.com)
