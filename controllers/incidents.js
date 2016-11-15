@@ -9,7 +9,7 @@ exports.getIncidents = function(req, res) {
 
 var allIncidents = function(req, res) {
   var searchQuery = incidentsSerializer.transformQuery(req.query);
-  if (searchQuery["invalid_parameter"]) {
+  if (searchQuery["incidents"]["invalid_parameter"]) {
     return res.json({invalid_request: "unrecognized search parameter"})
   };
   models.Incident.findByQuery(models, searchQuery, req.query["page"])

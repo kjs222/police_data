@@ -78,11 +78,17 @@ module.exports = function(sequelize, DataTypes) {
         var offset = 100 * (page - 1);
         console.log(query);
         return Incident.findAndCountAll({
-                        where: query,
+                        where: query.incidents,
                         offset: offset,
                         limit: 100,
                         order: '"date" ASC',
-                        include: [ {model: models.Beat}, {model: models.Disposition},{model: models.CallType}]
+                        include: [ {model: models.Beat,
+                            where: query.beats},
+                          {model: models.Disposition,
+                            where: query.dispositions},
+                          {model: models.CallType,
+                            where: query.calls}
+                        ]
         });
       },
       findByNeighAndMonth: function(models, query) {
