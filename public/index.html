@@ -31,11 +31,11 @@
 
 
     <div class="tab-container">
-      <h4 class="tab active-tab" target="area-chart">Compare Neighborhoods</h5>
+      <h4 class="tab active-tab" target="about">About</h5>
+      <h4 class="tab" target="area-chart">Compare Neighborhoods</h5>
       <h4 class='tab' target="bubble-chart">All Neighborhoods</h5>
       <h4 class="tab" target="scatter-chart">Neighborhood In Depth</h5>
     </div>
-
 
     <div class="chart-section chart-border bubble-chart">
       <h4>Number of Total Incidents and Arrests for All Neighborhoods</h4>
@@ -57,9 +57,9 @@
       </div>
     </div>
 
-    <div class="chart-section area-chart active">
+    <div class="chart-section area-chart">
       <div class="chart-border">
-        <h4>Distribution of Incident Types for Selected Neighborhoods</h4>
+        <h4>Distribution of Disposition Types for Selected Neighborhoods</h4>
           <form class="form-inline col-sm-5">
             <input class="neigh-input form-control" type="text" id="neigh-1" list="neigh-1-list" placeholder="neighborhood...">
             <datalist class="neigh-dropdown" id="neigh-1-list"></datalist>
@@ -75,6 +75,29 @@
             <h4 class="neigh-title">La Jolla</h4>
             <div class="chart" id="disp-cat-2"></div>
           </form>
+      </div>
+    </div>
+
+    <div class="chart-section about active">
+      <div class="col-sm-12 about-content">
+        <h4>Overview</h4>
+        <p>This project provides an API for the City Of San Diego Police Incident data provided by the City as CSV files on its <a href="http://data.sandiego.gov/dataset/police-calls-service">open data portal</a>. The data in this API consists of incidents from <strong>January 1, 2015</strong> through <strong>August 8, 2016</strong>.  It will be updated periodically. Sample data visualizations that utilize the data from this API are provided on this page.</p>
+        <h4>Note on Data Integrity</h4>
+        <p>The CSV data required extensive cleaning and normalizing in order to be provided through this API. Data integrity may have suffered as the result of the need to make decisions during the data cleaning process. Examples include: </p>
+        <ul>
+          <li>There were a significant number of duplicate records for the same incident in the original data source.  All duplicates were removed and the record with the latest timestamp was maintained.</li>
+          <li>The incidents data source references contained in the other data sources (beats, etc).  The data was normalized to be relational.</li>
+          <li>Many values found on incident records did not correspond to data in the related data source.  When there was a considerable number of incident records coded to a value that did not exist on the related data source, this value was added.  For example, beat numbers 100, 200, 300, etc.</li>
+        </ul>
+
+        <h4>Resources</h4>
+        <p>The API is designed to provide developers with the opportunity to search the incidents records along a number of parameters.  Please explore the API documentation for details.  Search parameters can be combined.  For example, a query can search incidents that occurred on a certain day, within a certain neighborhood, with a specified disposition description (i.e. arrest).</p>
+        <p>A dump file from the Postgres database that serves this API is also provided.</p>
+        <form id='api_selector'>
+          <div class='input'><a id="explore" class="header__btn" href="/documentation" data-sw-translate>Explore API</a></div>
+          <div class='input'><a id="explore" class="header__btn" href="https://s3-us-west-2.amazonaws.com/kjs222data/police_data.dump" data-sw-translate>Postgres Dump File</a></div>
+        </form>
+
       </div>
     </div>
 
