@@ -294,8 +294,21 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
       newData[data["type"]] = [{month: data.month, incidents: data.incidents}]
     }
   })
+  types = []
+  for(i in newData) {
 
-  data = newData["Other"]
+    function compare(a,b) {
+      if (a.month < b.month)
+        return -1;
+      if (a.month > b.month)
+        return 1;
+      return 0;
+    }
+
+    var values = newData[i].sort(compare)
+    types.push( {type: i, values: values })
+  }
+
 
   var width = 1100,
     height = 600,
@@ -304,21 +317,33 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
   var xValue = function(d) { return d.month;}
   var yValue = function(d) { return d.incidents;}
 
+  // var color = d3.scale.category20();
+  //
+  // var zScale = d3.scale.ordinal(d3.schemeCategory10);
+
   var vis = d3.select(".d3-chart-line")
               .append("svg")
               .attr("width", width)
               .attr("height", height);
 
-  var g = vis.append("g").attr("transform", "translate(0," + padding + ")");
-
+  function compare(a,b) {
+    if (a.month < b.month)
+      return -1;
+    if (a.month > b.month)
+      return 1;
+    return 0;
+  }
+  var months = ["April", "August", "December", "February", "January", "July", "June", "March", "May", "November", "October", "September"]
 
   var xScale = d3.scale.ordinal()
-      .domain(data.map(function(d) { return d.month; }))
+      .domain(months)
       .rangePoints([padding, width-padding*2])
 
   var yScale = d3.scale.linear()
       .domain([0, d3.max(data, yValue)])
       .range([height-padding, 0]);
+
+    var zScale = d3.scale.ordinal(d3.schemeCategory10);
 
   var yAxis = d3.svg.axis()
         .orient("left")
@@ -343,12 +368,24 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
     .x(function(d) { return xScale(d.month); })
     .y(function(d) { return yScale(d.incidents); })
 
+  var type = vis.selectAll(".type")
+     .data(types)
+     .enter().append("g")
+     .attr("class", "type");
 
-  g.append("path")
-    .datum(data)
-    .attr("class", "line")
-    .attr("d", line)
-    .style("fill", "none")
-    .style("stroke", "#000");
+   type.append("path")
+       .attr("class", "line")
+       .attr("d", function(d) { return line(d.values); })
+       .style("fill", "none")
+       .style("stroke", "#000");
+      //  .style("stroke", function(d) { return z(d.id); });
+
+
+  // vis.append("path")
+  //   .datum(data)
+  //   .attr("class", "line")
+  //   .attr("d", line)
+  //   .style("fill", "none")
+  //   .style("stroke", "#000");
 
 });
