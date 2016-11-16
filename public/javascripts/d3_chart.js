@@ -282,3 +282,73 @@ legend.append("text")
 });
 
 // http://bl.ocks.org/weiglemc/6185069
+
+
+$.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(data) {
+
+  var newData = {};
+  data.forEach(function(data){
+    if (newData[data["type"]]) {
+      newData[data["type"]].push({month: data.month, incidents: data.incidents})
+    } else {
+      newData[data["type"]] = [{month: data.month, incidents: data.incidents}]
+    }
+  })
+
+  data = newData["Other"]
+
+  var width = 1100,
+    height = 600,
+    padding = 100;
+
+  var xValue = function(d) { return d.month;}
+  var yValue = function(d) { return d.incidents;}
+
+  var vis = d3.select(".d3-chart-line")
+              .append("svg")
+              .attr("width", width)
+              .attr("height", height);
+
+  var g = vis.append("g").attr("transform", "translate(0," + padding + ")");
+
+
+  var xScale = d3.scale.ordinal()
+      .domain(data.map(function(d) { return d.month; }))
+      .rangePoints([padding, width-padding*2])
+
+  var yScale = d3.scale.linear()
+      .domain([0, d3.max(data, yValue)])
+      .range([height-padding, 0]);
+
+  var yAxis = d3.svg.axis()
+        .orient("left")
+        .scale(yScale);
+
+  var xAxis = d3.svg.axis()
+        .orient("bottom")
+        .scale(xScale);
+
+  vis.append("g")
+    .attr("class", "yaxis")
+    .attr("transform", "translate("+padding+",0)")
+    .call(yAxis);
+
+      // draw x axis with labels and move to the bottom of the chart area
+  vis.append("g")
+      .attr("class", "xaxis")
+      .attr("transform", "translate(0," + (height - padding) + ")")
+      .call(xAxis);
+
+  var line = d3.svg.line()
+    .x(function(d) { return xScale(d.month); })
+    .y(function(d) { return yScale(d.incidents); })
+
+
+  g.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line)
+    .style("fill", "none")
+    .style("stroke", "#000");
+
+});
