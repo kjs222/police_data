@@ -40,11 +40,12 @@ var renderAreaChart = function(elementId, neighborhood) {
     var areaData = areaData.length === 2 ? areaData[0] : areaData; //take out when raw query issue is handled
     var areaSvg = dimple.newSvg(elementId, 540, 520);
     var areaChart = new dimple.chart(areaSvg, areaData);
-    areaChart.setBounds(40, 10, 380, 420);
+    areaChart.setBounds(40, 25, 380, 420);
     var areaX = areaChart.addCategoryAxis("x", "month");
-    areaX.addGroupOrderRule("month");
+    areaX.addOrderRule("month");
     areaChart.addPctAxis("y", "incidents");
     var areaSeries = areaChart.addSeries(["neighborhood", "type"], dimple.plot.area);
+    areaSeries.addOrderRule("type");
     areaSeries.lineWeight = 1;
     areaSeries.barGap = 0.05;
     if (elementId === "#disp-cat-2") {

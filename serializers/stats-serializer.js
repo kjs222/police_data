@@ -1,5 +1,5 @@
 function StatsSerializer() {
-    this.intToMonth = {   1: "01 Ja",
+    this.intToMonth = {   1: "01 Jan",
                           2: "02 Feb",
                           3: "03 Mar",
                           4: "04 Apr",

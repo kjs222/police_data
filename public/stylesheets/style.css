@@ -45,7 +45,11 @@ h4 {
   font-size: 20px;
   font-family: "Droid Sans", sans-serif;
   text-align: center;
-  padding: 20px 20px 0px 20px;
+  padding-top: 20px;
+}
+
+.neigh-title-2 {
+  margin-left: -100px;
 }
 
 .form-inline {
@@ -53,7 +57,7 @@ h4 {
 }
 
 .form-inline .neigh-input {
-  margin-left: 60px;
+  margin-left: 0px;
 }
 
 .chart {
