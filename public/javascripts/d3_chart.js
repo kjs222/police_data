@@ -316,10 +316,9 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
 
   var xValue = function(d) { return d.month;}
   var yValue = function(d) { return d.incidents;}
+  var cValue = function(d) { return d.type;}
 
-  // var color = d3.scale.category20();
-  //
-  // var zScale = d3.scale.ordinal(d3.schemeCategory10);
+  var color = d3.scale.category20();
 
   var vis = d3.select(".d3-chart-line")
               .append("svg")
@@ -358,7 +357,6 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
     .attr("transform", "translate("+padding+",0)")
     .call(yAxis);
 
-      // draw x axis with labels and move to the bottom of the chart area
   vis.append("g")
       .attr("class", "xaxis")
       .attr("transform", "translate(0," + (height - padding) + ")")
@@ -377,15 +375,7 @@ $.get('api/v1/stats/disposition_category_stats?neighborhood=talmadge', function(
        .attr("class", "line")
        .attr("d", function(d) { return line(d.values); })
        .style("fill", "none")
-       .style("stroke", "#000");
-      //  .style("stroke", function(d) { return z(d.id); });
+       .style("stroke", function(d) { return color(cValue(d));});
 
-
-  // vis.append("path")
-  //   .datum(data)
-  //   .attr("class", "line")
-  //   .attr("d", line)
-  //   .style("fill", "none")
-  //   .style("stroke", "#000");
 
 });
