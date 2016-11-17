@@ -17,7 +17,8 @@ var drawMap = function() {
                 .attr('class', 'map')
 
     var projection = d3.geo.mercator()
-                           .scale(1000000)
+                           .center([-117, 32])
+                           .scale(100)
                            .translate([width/2, height/2])
 
     var path = d3.geo.path()
