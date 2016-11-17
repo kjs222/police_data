@@ -31,6 +31,20 @@ exports.getDispCategoryStats = function(req, res) {
   });
 };
 
+exports.getArrestStats = function(req, res) {
+  var cacheKey = 'map-stats';
+  var ttl = 10000000;
+  memoryCache.get(cacheKey, function(err, result) { if (result !== undefined){return res.json(result);} });
+  memoryCache.wrap(cacheKey, function (cacheCb) {
+    models.Beat.arrestCount().then(function(stats) {
+       stats = stats.length === 2 ? stats[0] : stats;
+       memoryCache.set(cacheKey, stats, {ttl: ttl}, function(err) {
+           return res.json(stats);
+       });
+     }, cacheCb);
+  });
+};
+
 exports.getNeighIncidentStats = function(req, res) {
   var cacheKey = 'disp-stats-' + req.query.month + "-" + req.query.neighborhood + "-" + req.query.code;
   var ttl = 10000000;

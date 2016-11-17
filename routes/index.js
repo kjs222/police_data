@@ -44,6 +44,9 @@ router.route('/api/v1/stats/disposition_category_stats')
 router.route('/api/v1/stats/neigh_incident_stats')
   .get(statsController.getNeighIncidentStats);
 
+router.route('/api/v1/stats/neigh_arrest_stats')
+  .get(statsController.getArrestStats);
+
 module.exports = router;
 
 if (!module.parent) {
