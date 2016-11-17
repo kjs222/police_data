@@ -12,7 +12,7 @@ exports.getOverviewStats = function(req, res) {
       if (result !== undefined){ console.log("found cache"); return res.json(result);}
   });
   memoryCache.wrap(cacheKey, function (cacheCb) {
-    console.log("Fetching data from slow database");
+    console.log("Fetching bubble chart data from slow database");
     models.Beat.summaryStats().then(function(data) {
       memoryCache.set(cacheKey, data, {ttl: ttl}, function(err) {
           return res.json(data);
@@ -24,18 +24,38 @@ exports.getOverviewStats = function(req, res) {
 
 exports.getDispCategoryStats = function(req, res) {
   var neighborhood = req.query["neighborhood"] || "Gaslamp";
-  models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
-     stats = stats.length === 2 ? stats[0] : stats;
-    statsSerializer.serializeDispositionStats(stats);
-     return res.json(stats)
+  var cacheKey = 'disp-stats-' + neighborhood;
+  var ttl = 10000000;
+  memoryCache.get(cacheKey, function(err, result) {
+      console.log("looking for disp cache for ", neighborhood)
+      if (result !== undefined){ console.log("found cache for ", neighborhood); return res.json(result);}
+  });
+  memoryCache.wrap(cacheKey, function (cacheCb) {
+    console.log("Fetching area chart data from slow database for ", neighborhood);
+    models.Beat.statsByDispCategory(neighborhood).then(function(stats) {
+       stats = stats.length === 2 ? stats[0] : stats;
+       statsSerializer.serializeDispositionStats(stats);
+       memoryCache.set(cacheKey, stats, {ttl: ttl}, function(err) {
+           return res.json(stats);
+       });
+     }, cacheCb);
   });
 };
 
 exports.getNeighIncidentStats = function(req, res) {
-  models.Incident.findByNeighAndMonth(models, req.query).then(function(stats) {
-    for(i in stats) {
-        stats[i] = stats[i].serialize();
-    }
-     return res.json(stats)
+  var cacheKey = 'disp-stats-' + req.query.month + "-" + req.query.neighborhood + "-" + req.query.code;
+  var ttl = 10000000;
+  memoryCache.get(cacheKey, function(err, result) {
+      console.log("looking for incidents cache for ", cacheKey)
+      if (result !== undefined){ console.log("found cache for ", cacheKey); return res.json(result);}
+  });
+  memoryCache.wrap(cacheKey, function (cacheCb) {
+    models.Incident.findByNeighAndMonth(models, req.query).then(function(stats) {
+      console.log("Fetching scatter chart data from slow database for ", cacheKey);
+      for(i in stats) { stats[i] = stats[i].serialize(); }
+      memoryCache.set(cacheKey, stats, {ttl: ttl}, function(err) {
+          return res.json(stats);
+      });
+    }, cacheCb);
   });
 };
