@@ -12,6 +12,7 @@ This project represents my final project at Turing.  The project spec required t
 * Sequelize as the ORM
 * D3 for charting
 * Dimple JS for charting
+* Node Cache Manager to cache data for charts
 * Swagger for API documentation
 
 Note: D3-only is a branch with some WIP D3-only charts (i.e. no Dimple).  I plan to keep working on these and see if I can recreate all of the charts only using D3.
@@ -56,4 +57,4 @@ Resources:
 [PG database dump]()  - TBP can import into a postgres DB
 
 ### Notes/Next Steps:  
-The CSV data is updated weekly from the City of San Diego.  The data required extensive cleaning and normalizing for the purposes of this project.  I have notes on the cleaning and normalizing process that I followed, which I would like to include on the project site.  I would also like to identify a process for routine updates to the database based on udpated CSV data from the City.
+The CSV data is updated weekly from the City of San Diego.  The data required extensive cleaning and normalizing for the purposes of this project.  I have notes on the cleaning and normalizing process that I followed, which I would like to include on the project site.  I would also like to identify a process for routine updates to the database based on updated CSV data from the City.
