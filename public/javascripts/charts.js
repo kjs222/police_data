@@ -167,7 +167,7 @@ var renderNeighborhoodDropDownList = function() {
 }
 
 var renderDateDropDownList = function(date) {
-  $("date-select-span").remove();
+  $("#date-select-span").remove();
   $.get("/api/v1/incidents_months", function(dates) {
     var selectEl = "<span id='date-select-span'><select class='form-control' id='date-select'></select></span>"
     $(selectEl).appendTo("#scatter-title")
