@@ -20,7 +20,7 @@ module.exports = function(sequelize, DataTypes) {
         return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_incidents FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id GROUP BY Beat.id, Beat.neighborhood")
       },
       arrestCount: function() {
-        return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_arrests FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id LEFT OUTER JOIN dispositions AS Dispositions ON Incidents.disposition_id = Dispositions.id WHERE Dispositions.code LIKE 'A%' GROUP BY Beat.id")
+        return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_arrests FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id LEFT OUTER JOIN dispositions AS Dispositions ON Incidents.disposition_id = Dispositions.id WHERE Dispositions.code LIKE 'A%' AND Beat.neighborhood IS NOT NULL GROUP BY Beat.id")
       },
       mhRelatedCount: function() {
         return sequelize.query("SELECT Beat.id, Beat.neighborhood, count(Incidents.id) AS num_mental_health_incidents FROM beats AS Beat LEFT OUTER JOIN incidents AS Incidents ON Beat.id = Incidents.beat_id LEFT OUTER JOIN dispositions AS Dispositions ON Incidents.disposition_id = Dispositions.id WHERE Dispositions.code LIKE '%M' GROUP BY Beat.id")
