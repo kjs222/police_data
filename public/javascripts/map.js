@@ -28,8 +28,8 @@ var drawMap = function() {
 
     var projection = d3.geo.mercator()
                            .scale(scale)
+                           .center([-117.2, 32.7])
                            .translate(offset);
-                          //  .center(center)
 
 
     var path = d3.geo.path().projection(projection);
@@ -47,16 +47,18 @@ var drawMap = function() {
 
    function ready(error, map, data) {
 
-     var scale  = 100;
      var center = d3.geo.centroid(map)
      var bounds  = path.bounds(map);
-     var offset  = [width - (bounds[0][0] + bounds[1][0])/2,
-                    height - (bounds[0][1] + bounds[1][1])/2];
+     var scale = 40000;
+    //  var offset  = [width - (bounds[0][0] + bounds[1][0])/2,
+    //                 height - (bounds[0][1] + bounds[1][1])/2];
+
+
 
      projection = d3.geo.mercator()
                         .center(center)
                         .scale(scale)
-                        .translate(offset);
+                        .translate([-1200, 100]);
 
      path = path.projection(projection);
 
@@ -74,7 +76,7 @@ var drawMap = function() {
           .append("path")
           .attr("d", path)
           .style("fill", function(d) {
-                return color(arrestsByNeighborhood[d.properties.neighborhood]);
+                return color(arrestsByNeighborhood[d.properties.name]);
            })
           .style("stroke-width", "1")
           .style("stroke", "black")
