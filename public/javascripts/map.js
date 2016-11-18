@@ -6,10 +6,23 @@ $(document).ready(function() {
 var drawMap = function() {
     var color_domain = [250, 500, 1000, 1500, 2000, 4000]
     var ext_color_domain = [0, 250, 500, 1000, 1500, 2000]
-    var legend_labels = ["< 250", "250+", "500+", "1000+", "1500+", "> 2000"]
+    // var legend_labels = ["< 250", "250+", "500+", "1000+", "1500+", "> 2000"]
     var color = d3.scale.threshold()
                         .domain(color_domain)
-                        .range(["#adfcad", "#ffcb40", "#ffba00", "#ff7d73", "#ff4e40", "#ff1300"]);
+                        .range(d3.schemeBlues[6]);
+
+    // new for color
+    // var arrests = d3.map();
+    var x = d3.scale.linear()
+        .domain([1, 10])
+        .rangeRound([600, 860]);
+    // var color = d3.scale.threshold()
+    //     .domain(d3.range(2, 10))
+    //     .range(d3.schemeBlues[9]);
+
+
+
+
 
     var margin = 75,
         width = 1000-margin,
@@ -40,6 +53,45 @@ var drawMap = function() {
        .style('stroke', 'black')
        .style('fill', 'none');
 
+      //new for color
+      var g = svg.append("g")
+    .attr("class", "key")
+    .attr("transform", "translate(0,40)");
+
+
+     g.selectAll("rect")
+       .data(color.range().map(function(d) {
+           d = color.invertExtent(d);
+           if (d[0] == null) d[0] = x.domain()[0];
+           if (d[1] == null) d[1] = x.domain()[1];
+           return d;
+         }))
+       .enter().append("rect")
+         .attr("height", 8)
+         .attr("x", function(d) { return x(d[0]); })
+         .attr("width", function(d) { return x(d[1]) - x(d[0]); })
+         .attr("fill", function(d) { return color(d[0]); });
+
+     g.append("text")
+         .attr("class", "caption")
+         .attr("x", x.range()[0])
+         .attr("y", -6)
+         .attr("fill", "#000")
+         .attr("text-anchor", "start")
+         .attr("font-weight", "bold")
+         .text("Unemployment rate");
+
+    //  g.call(d3.axis.bottom(x)
+    //      .tickSize(13)
+    //      .tickFormat(function(x, i) { return i ? x : x + "%"; })
+    //      .tickValues(color.domain()))
+    //    .select(".domain")
+    //      .remove();
+
+
+
+
+
    queue()
    .defer(d3.json, "sd_neigh_geojson.json")
    .defer(d3.json, "api/v1/stats/neigh_arrest_stats")
@@ -50,8 +102,6 @@ var drawMap = function() {
      var center = d3.geo.centroid(map)
      var bounds  = path.bounds(map);
      var scale = 40000;
-    //  var offset  = [width - (bounds[0][0] + bounds[1][0])/2,
-    //                 height - (bounds[0][1] + bounds[1][1])/2];
 
 
 
@@ -99,3 +149,5 @@ var drawMap = function() {
   //
 
 }
+
+// http://bl.ocks.org/KoGor/5685876
