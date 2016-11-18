@@ -4,17 +4,17 @@ $(document).ready(function() {
 });
 
 var drawMap = function() {
-    var color_domain = [250, 500, 1000, 1500, 2000, 4000]
-    var ext_color_domain = [0, 250, 500, 1000, 1500, 2000]
+    var color_domain = [500, 1000, 1500, 2000, 4000]
+    var ext_color_domain = [0, 500, 1000, 1500, 2000]
     // var legend_labels = ["< 250", "250+", "500+", "1000+", "1500+", "> 2000"]
     var color = d3.scale.threshold()
                         .domain(color_domain)
-                        .range(d3.schemeBlues[6]);
+                        .range(d3.schemeReds[5]);
 
     // new for color
     // var arrests = d3.map();
     var x = d3.scale.linear()
-        .domain([1, 10])
+        .domain([1, 6])
         .rangeRound([600, 860]);
     // var color = d3.scale.threshold()
     //     .domain(d3.range(2, 10))
@@ -55,8 +55,8 @@ var drawMap = function() {
 
       //new for color
       var g = svg.append("g")
-    .attr("class", "key")
-    .attr("transform", "translate(0,40)");
+        .attr("class", "key")
+        .attr("transform", "translate(0,40)");
 
 
      g.selectAll("rect")
@@ -125,28 +125,11 @@ var drawMap = function() {
           .enter()
           .append("path")
           .attr("d", path)
-          .style("fill", function(d) {
-                return color(arrestsByNeighborhood[d.properties.name]);
-           })
+          .style("fill", function(d) { return color(arrestsByNeighborhood[d.properties.name]);})
           .style("stroke-width", "1")
           .style("stroke", "black")
   }
 
-  // svg.append("g")
-  //     .attr("class", "region")
-  //     .selectAll("path")
-  //     .data(topojson.object(map, map.objects.russia).geometries)
-  //     //.data(topojson.feature(map, map.objects.russia).features) <-- in case topojson.v1.js
-  //     .enter().append("path")
-  //     .attr("d", path)
-  //     .style("fill", function(d) {
-  //       return color(rateById[d.properties.region]);
-  //     })
-  //     .style("opacity", 0.8)
-
-
-
-  //
 
 }
 
