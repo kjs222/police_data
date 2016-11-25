@@ -38,9 +38,10 @@ var renderActivatedChart = function(chartToActivate) {
 var renderAreaChart = function(elementId, neighborhood) {
   $.get('api/v1/stats/disposition_category_stats?neighborhood=' + neighborhood, function(areaData){
     var areaData = areaData.length === 2 ? areaData[0] : areaData; //take out when raw query issue is handled
-    var areaSvg = dimple.newSvg(elementId, 540, 520);
+    var areaSvg = dimple.newSvg(elementId, "100%", "100%")
     var areaChart = new dimple.chart(areaSvg, areaData);
-    areaChart.setBounds(40, 25, 380, 420);
+    areaChart.setMargins("30px", "50px", "70px", "100px");
+
     var areaX = areaChart.addCategoryAxis("x", "month");
     areaX.addOrderRule("month");
     areaChart.addPctAxis("y", "incidents");
@@ -48,14 +49,19 @@ var renderAreaChart = function(elementId, neighborhood) {
     areaSeries.addOrderRule("type");
     areaSeries.lineWeight = 1;
     areaSeries.barGap = 0.05;
-    if (elementId === "#disp-cat-2") {
-      areaChart.addLegend(450, 20, 100, 300, "left");
+
+
+    if ($(window).width() > 767) {
+      areaChart.addLegend("-70px", "50px", "100px", "-70px")
     }
+
     areaChart.draw();
     areaSvg.selectAll(".dimple-title")
       .style("font-size", '14px')
     areaSvg.selectAll(".dimple-legend")
       .style("font-size", '10px')
+
+
   });
 }
 
@@ -200,9 +206,9 @@ var renderNeighborhoodDropDownList = function() {
 }
 
 var renderDateDropDownList = function(date) {
-  $("#date-select-span").remove();
+  $("#date-select").remove();
   $.get("/api/v1/incidents_months", function(dates) {
-    var selectEl = "<span id='date-select-span'><select class='form-control' id='date-select'></select></span>"
+    var selectEl = "<select class='form-control month-selector' id='date-select'></select>"
     $(selectEl).appendTo("#scatter-title")
     $.each(dates, function(index, item) {
         var value = item.split("/")[0] + "/01/" + item.split("/")[1]
@@ -299,15 +305,18 @@ var renderBubbleChart = function() {
     bubbleSvg.selectAll(".dimple-custom-axis-label")
       .style("font-size", '12px')
 
-    var bubbleFilterOptions = {chart        :bubbleChart,
-                               svg          :bubbleSvg,
-                               legend       :bubbleLegend,
-                               data         :bubbleStats,
-                               x            :$("#neighborhood-stats").width()-180,
-                               y            :20,
-                               filterField  : "neighborhood"}
+    if ($("#neighborhood-stats").width() > 500)  {
 
-    legendFilter(bubbleFilterOptions)
+      var bubbleFilterOptions = {chart        :bubbleChart,
+                                 svg          :bubbleSvg,
+                                 legend       :bubbleLegend,
+                                 data         :bubbleStats,
+                                 x            :$("#neighborhood-stats").width()-180,
+                                 y            :20,
+                                 filterField  : "neighborhood"}
+
+      legendFilter(bubbleFilterOptions)
+    };
 
     window.onresize = function () {
       if ($("#neighborhood-stats").width() > 500)  {

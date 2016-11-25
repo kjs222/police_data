@@ -1,6 +1,11 @@
 #header.home-header {
   min-height: 50px;
+  min-width: 100vw !important;
   background-color: black;
+}
+
+.home-title {
+    min-width: 100vw !important;
 }
 
 h4 {
@@ -48,9 +53,6 @@ h4 {
   padding-top: 20px;
 }
 
-.neigh-title-2 {
-  margin-left: -100px;
-}
 
 .form-inline {
   margin-top: 20px;
@@ -64,6 +66,10 @@ h4 {
   margin: 0px, 30px, 30px, 30px;
 }
 
+.month-selector {
+  max-width: 100px;
+}
+
 .chart-section:not(.active) {
   display:none;
 }
@@ -71,15 +77,13 @@ h4 {
 .chart-section:not(.about) {
   width: 99%;
   margin-left: 5px;
-  border: .5px solid gray;
   text-align: center;
 }
 
 .main {
   padding-top: 20px;
   width: 85%;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
 }
 
 #date-select {
@@ -157,5 +161,17 @@ h4 {
   }
   .tab {
     font-size: 10px;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .main {
+    width: 95%;
+  }
+  #logo{
+    font-size: 1.25em !important;
+  }
+  #api_selector .input {
+    margin-right: 30px !important;
   }
 }
