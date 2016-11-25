@@ -70,7 +70,7 @@ var renderScatterChart = function(neighborhood, month) {
 
         scatterData = scatterData.concat(reportStats);
 
-        var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", 1050, 500)
+        var scatterSvg = dimple.newSvg("#neigh-incidents-scatter", "100%", "100%")
         scatterData.forEach(function (d) {
           d["Day"] = d["date"].substring(0, d["date"].length - 6);
           d["Time of Day"] =
@@ -115,6 +115,7 @@ var legendFilter = function(options) {
         .append("text")
           .attr("x", options.x)
           .attr("y", function (d, i) { return options.y + i * 15; })
+          .attr("class", "filter-text")
           .style("font-family", "sans-serif")
           .style("font-size", "10px")
           .style("color", "Black")
@@ -223,9 +224,9 @@ var renderBubbleChart = function() {
   $.get('/api/v1/stats/overview_stats', function(stats) {
     $(".progress").hide();
     var bubbleStats = stats.length === 2 ? stats[0] : stats;
-    var bubbleSvg = dimple.newSvg("#neighborhood-stats", 1050, 550);
+    var bubbleSvg = dimple.newSvg("#neighborhood-stats", "100%", "100%");
     var bubbleChart = new dimple.chart(bubbleSvg, bubbleStats);
-    bubbleChart.setBounds(60, 60, 850, 450)
+    bubbleChart.setMargins("60px", "30px", "150px", "70px")
     var bubbleX = bubbleChart.addMeasureAxis("x", "num_incidents");
     bubbleX.title = "Total Number of Incidents"
     var bubbleY = bubbleChart.addMeasureAxis("y", "num_arrests");
@@ -249,12 +250,11 @@ var renderBubbleChart = function() {
 
     bubbleSeries.lineWeight = 4;
     bubbleSeries.lineMarkers = true;
-    var bubbleLegend = bubbleChart.addLegend(1000, 190, 60, 300, "Right");
+    var bubbleLegend = bubbleChart.addLegend("-100px", "30px", "100px", "-70px");
     bubbleChart.draw();
 
     bubbleSvg.selectAll(".dimple-axis-x")
       .style("font-size", '14px')
-      .attr("y", 550)
     bubbleSvg.selectAll(".dimple-axis-y")
       .style("font-size", '14px')
     bubbleSvg.selectAll(".dimple-legend")
@@ -266,10 +266,27 @@ var renderBubbleChart = function() {
                                svg          :bubbleSvg,
                                legend       :bubbleLegend,
                                data         :bubbleStats,
-                               x            :925,
-                               y            :150,
+                               x            :$("#neighborhood-stats").width()-100,
+                               y            :20,
                                filterField  : "neighborhood"}
 
     legendFilter(bubbleFilterOptions)
+
+    window.onresize = function () {
+      bubbleChart.setMargins("60px", "30px", "150px", "70px")
+      $(".dimple-legend").remove();
+      $(".filter-text").remove();
+      var bubbleLegend = bubbleChart.addLegend("-100px", "30px", "100px", "-70px");
+      bubbleChart.draw(0, true);
+      var bubbleFilterOptions = {chart        :bubbleChart,
+                                 svg          :bubbleSvg,
+                                 legend       :bubbleLegend,
+                                 data         :bubbleStats,
+                                 x            :$("#neighborhood-stats").width()-100,
+                                 y            :20,
+                                 filterField  : "neighborhood"}
+      legendFilter(bubbleFilterOptions)
+
+    };
   });
 }

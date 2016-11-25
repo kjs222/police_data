@@ -35,14 +35,14 @@
       <h4 class="tab active-tab" target="about">About</h5>
       <h4 class="tab" target="area-chart">Compare <span class="hidden-small">Neighborhoods</span></h5>
       <h4 class='tab' target="bubble-chart">All <span class="hidden-small">Neighborhoods</span></h5>
-      <h4 class="tab" target="scatter-chart"><span class="hidden-small">Neighborhood</span> In Depth</h5>
+      <h4 class="tab" target="scatter-chart"><span class="hidden-small">Neighborhood</span> In-Depth</h5>
     </div>
 
     <div class="chart-section chart-border bubble-chart">
       <h4>Number of Total Incidents and Arrests for All Neighborhoods</h4>
       <p>transient-related incidents represented by circle radius</p>
       <div class="large progress"><div>Loading…</div></div>
-      <div class="chart" id="neighborhood-stats"></div>
+      <div class="chart" id="neighborhood-stats" style="height: 95vh"></div>
     </div>
 
     <div class="chart-section scatter-chart">
@@ -53,7 +53,7 @@
           <datalist class="neigh-dropdown" id="neigh-inc-list"></datalist>
           <button class="neigh-select btn btn-default" target="neigh-inc" type="button" name="button">Go</button>
           <h4 class="neigh-title" id="scatter-title">Talmadge</h4>
-          <div class="chart" id="neigh-incidents-scatter"></div>
+          <div class="chart" id="neigh-incidents-scatter" style="height: 95vh"></div>
         </form>
       </div>
     </div>
@@ -66,7 +66,7 @@
             <datalist class="neigh-dropdown" id="neigh-1-list"></datalist>
             <button class="neigh-select btn btn-default" target="neigh-1" type="button" name="button">Go</button>
             <h4 class="neigh-title">Gaslamp</h4>
-            <div class="chart" id="disp-cat-1"></div>
+            <div class="chart" id="disp-cat-1" style="height: 95vh"></div>
           </form>
 
           <form class="form-inline col-md-6">
@@ -74,7 +74,7 @@
             <datalist class="neigh-dropdown" id="neigh-2-list"></datalist>
             <button class="neigh-select btn btn-default" target="neigh-2" type="button" name="button">Go</button>
             <h4 class="neigh-title neigh-title-2">La Jolla</h4>
-            <div class="chart" id="disp-cat-2"></div>
+            <div class="chart" id="disp-cat-2" style="height: 95vh"></div>
           </form>
       </div>
     </div>
