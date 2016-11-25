@@ -258,7 +258,13 @@ var renderBubbleChart = function() {
     var bubbleStats = stats.length === 2 ? stats[0] : stats;
     var bubbleSvg = dimple.newSvg("#neighborhood-stats", "100%", "100%");
     var bubbleChart = new dimple.chart(bubbleSvg, bubbleStats);
-    bubbleChart.setMargins("60px", "30px", "180px", "70px")
+
+    if ($("#neighborhood-stats").width() > 500)  {
+      bubbleChart.setMargins("60px", "30px", "200px", "70px")
+      var bubbleLegend = bubbleChart.addLegend("-180px", "30px", "100px", "-70px");
+    } else {
+      bubbleChart.setMargins("70px", "20px", "20px", "70px");
+    }
     var bubbleX = bubbleChart.addMeasureAxis("x", "num_incidents");
     bubbleX.title = "Total Number of Incidents"
     var bubbleY = bubbleChart.addMeasureAxis("y", "num_arrests");
@@ -282,7 +288,6 @@ var renderBubbleChart = function() {
 
     bubbleSeries.lineWeight = 4;
     bubbleSeries.lineMarkers = true;
-    var bubbleLegend = bubbleChart.addLegend("-130px", "30px", "100px", "-70px");
     bubbleChart.draw();
 
     bubbleSvg.selectAll(".dimple-axis-x")
@@ -298,26 +303,32 @@ var renderBubbleChart = function() {
                                svg          :bubbleSvg,
                                legend       :bubbleLegend,
                                data         :bubbleStats,
-                               x            :$("#neighborhood-stats").width()-130,
+                               x            :$("#neighborhood-stats").width()-180,
                                y            :20,
                                filterField  : "neighborhood"}
 
     legendFilter(bubbleFilterOptions)
 
     window.onresize = function () {
-      bubbleChart.setMargins("60px", "30px", "150px", "70px")
+      if ($("#neighborhood-stats").width() > 500)  {
+        bubbleChart.setMargins("60px", "30px", "200px", "70px")
+        var bubbleLegend = bubbleChart.addLegend("-180px", "30px", "100px", "-70px");
+      } else {
+        bubbleChart.setMargins("70px", "20px", "20px", "70px");
+      }
       $(".dimple-legend").remove();
       $(".filter-text").remove();
-      var bubbleLegend = bubbleChart.addLegend("-130px", "30px", "100px", "-70px");
       bubbleChart.draw(0, true);
-      var bubbleFilterOptions = {chart        :bubbleChart,
-                                 svg          :bubbleSvg,
-                                 legend       :bubbleLegend,
-                                 data         :bubbleStats,
-                                 x            :$("#neighborhood-stats").width()-130,
-                                 y            :20,
-                                 filterField  : "neighborhood"}
-      legendFilter(bubbleFilterOptions)
+      if ($("#neighborhood-stats").width() > 500)  {
+        var bubbleFilterOptions = {chart        :bubbleChart,
+                                   svg          :bubbleSvg,
+                                   legend       :bubbleLegend,
+                                   data         :bubbleStats,
+                                   x            :$("#neighborhood-stats").width()-180,
+                                   y            :20,
+                                   filterField  : "neighborhood"}
+        legendFilter(bubbleFilterOptions)
+      }
     };
   });
 }
