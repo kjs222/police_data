@@ -65,7 +65,6 @@ var renderScatterChart = function(neighborhood, month) {
   var queryString = "?neighborhood=" + neighborhood + "&month=" + month + "&code=";
   $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%A", function(arrestStats) {
       scatterData = arrestStats;
-
       $.get('/api/v1/stats/neigh_incident_stats' + queryString + "%R", function(reportStats) {
 
         scatterData = scatterData.concat(reportStats);
@@ -79,18 +78,18 @@ var renderScatterChart = function(neighborhood, month) {
 
 
         var scatterChart = new dimple.chart(scatterSvg, scatterData);
-        scatterChart.setBounds(70, 20, 650, 400)
+        scatterChart.setMargins("70px", "20px", "200px", "70px");
         var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
         var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
           "%Y-%m-%d %H:%M", "%H:%M");
 
         scatterChart.addSeries(["neighborhood", "address", "disposition description", "call type description"], dimple.plot.scatter);
-        var scatterLegend = scatterChart.addLegend(820, 120, 60, 300);
+        var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+
         scatterChart.draw();
 
         scatterSvg.selectAll(".dimple-axis-x")
           .style("font-size", '14px')
-          .attr("y", 480)
         scatterSvg.selectAll(".dimple-axis-y")
           .style("font-size", '14px')
 
@@ -98,11 +97,28 @@ var renderScatterChart = function(neighborhood, month) {
                                    svg          :scatterSvg,
                                    legend       :scatterLegend,
                                    data         :scatterData,
-                                   x            :820,
-                                   y            :100,
+                                   x            :$("#neigh-incidents-scatter").width()-180,
+                                   y            :20,
                                    filterField  : "call type description"}
 
         legendFilter(scatterFilterOptions)
+
+        window.onresize = function () {
+          scatterChart.setMargins("70px", "20px", "200px", "70px");
+          $(".dimple-legend").remove();
+          $(".filter-text").remove();
+          var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+          scatterChart.draw(0, true);
+          var scatterFilterOptions = {chart       :scatterChart,
+                                     svg          :scatterSvg,
+                                     legend       :scatterLegend,
+                                     data         :scatterData,
+                                     x            :$("#neigh-incidents-scatter").width()-180,
+                                     y            :20,
+                                     filterField  : "call type description"}
+
+          legendFilter(scatterFilterOptions)
+        };
       });
   });
 };
@@ -226,7 +242,7 @@ var renderBubbleChart = function() {
     var bubbleStats = stats.length === 2 ? stats[0] : stats;
     var bubbleSvg = dimple.newSvg("#neighborhood-stats", "100%", "100%");
     var bubbleChart = new dimple.chart(bubbleSvg, bubbleStats);
-    bubbleChart.setMargins("60px", "30px", "150px", "70px")
+    bubbleChart.setMargins("60px", "30px", "180px", "70px")
     var bubbleX = bubbleChart.addMeasureAxis("x", "num_incidents");
     bubbleX.title = "Total Number of Incidents"
     var bubbleY = bubbleChart.addMeasureAxis("y", "num_arrests");
@@ -250,7 +266,7 @@ var renderBubbleChart = function() {
 
     bubbleSeries.lineWeight = 4;
     bubbleSeries.lineMarkers = true;
-    var bubbleLegend = bubbleChart.addLegend("-100px", "30px", "100px", "-70px");
+    var bubbleLegend = bubbleChart.addLegend("-130px", "30px", "100px", "-70px");
     bubbleChart.draw();
 
     bubbleSvg.selectAll(".dimple-axis-x")
@@ -266,7 +282,7 @@ var renderBubbleChart = function() {
                                svg          :bubbleSvg,
                                legend       :bubbleLegend,
                                data         :bubbleStats,
-                               x            :$("#neighborhood-stats").width()-100,
+                               x            :$("#neighborhood-stats").width()-130,
                                y            :20,
                                filterField  : "neighborhood"}
 
@@ -276,17 +292,16 @@ var renderBubbleChart = function() {
       bubbleChart.setMargins("60px", "30px", "150px", "70px")
       $(".dimple-legend").remove();
       $(".filter-text").remove();
-      var bubbleLegend = bubbleChart.addLegend("-100px", "30px", "100px", "-70px");
+      var bubbleLegend = bubbleChart.addLegend("-130px", "30px", "100px", "-70px");
       bubbleChart.draw(0, true);
       var bubbleFilterOptions = {chart        :bubbleChart,
                                  svg          :bubbleSvg,
                                  legend       :bubbleLegend,
                                  data         :bubbleStats,
-                                 x            :$("#neighborhood-stats").width()-100,
+                                 x            :$("#neighborhood-stats").width()-130,
                                  y            :20,
                                  filterField  : "neighborhood"}
       legendFilter(bubbleFilterOptions)
-
     };
   });
 }
