@@ -78,13 +78,19 @@ var renderScatterChart = function(neighborhood, month) {
 
 
         var scatterChart = new dimple.chart(scatterSvg, scatterData);
-        scatterChart.setMargins("70px", "20px", "200px", "70px");
+        if ($("#neigh-incidents-scatter").width() > 500)  {
+          scatterChart.setMargins("70px", "20px", "200px", "70px");
+          var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+        } else {
+          scatterChart.setMargins("70px", "20px", "20px", "70px");
+        }
+
         var scatterY = scatterChart.addTimeAxis("y", "Day", "%d %b %Y", "%d %b");
         var scatterX = scatterChart.addTimeAxis("x", "Time of Day",
           "%Y-%m-%d %H:%M", "%H:%M");
 
         scatterChart.addSeries(["neighborhood", "address", "disposition description", "call type description"], dimple.plot.scatter);
-        var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+
 
         scatterChart.draw();
 
@@ -101,23 +107,33 @@ var renderScatterChart = function(neighborhood, month) {
                                    y            :20,
                                    filterField  : "call type description"}
 
-        legendFilter(scatterFilterOptions)
+
+        if ($("#neigh-incidents-scatter").width() > 500)  {
+          legendFilter(scatterFilterOptions)
+        };
 
         window.onresize = function () {
-          scatterChart.setMargins("70px", "20px", "200px", "70px");
+
           $(".dimple-legend").remove();
           $(".filter-text").remove();
-          var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+          if ($("#neigh-incidents-scatter").width() > 500)  {
+            scatterChart.setMargins("70px", "20px", "200px", "70px");
+            var scatterLegend = scatterChart.addLegend("-180px", "30px", "100px", "-70px");
+          } else {
+            scatterChart.setMargins("70px", "20px", "20px", "70px");
+          }
           scatterChart.draw(0, true);
-          var scatterFilterOptions = {chart       :scatterChart,
-                                     svg          :scatterSvg,
-                                     legend       :scatterLegend,
-                                     data         :scatterData,
-                                     x            :$("#neigh-incidents-scatter").width()-180,
-                                     y            :20,
-                                     filterField  : "call type description"}
+          if ($("#neigh-incidents-scatter").width() > 500)  {
+            var scatterFilterOptions = {chart       :scatterChart,
+                                       svg          :scatterSvg,
+                                       legend       :scatterLegend,
+                                       data         :scatterData,
+                                       x            :$("#neigh-incidents-scatter").width()-180,
+                                       y            :20,
+                                       filterField  : "call type description"}
 
-          legendFilter(scatterFilterOptions)
+            legendFilter(scatterFilterOptions)
+          };
         };
       });
   });
